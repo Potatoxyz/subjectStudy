@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../plugin/normalizeCss/normalize.css">
+    <link rel="stylesheet" href="../plugin/animate/animate.css">
+    <link rel="stylesheet" href="../plugin/bootstrap3/bootstrap.css">
+    <link rel="stylesheet" href="../plugin/bootstrap3/bootstrap-theme.min.css">
+    <title>应用水文地球化学</title>
+</head>
+<style>
+    body{
+        padding:0;
+        margin:0;
+        min-height: 100vh;
+        background-color: black;
+        position: relative;
+    }
+    .fa-2x{
+        font-size: 2em;
+    }
+    .fa-3x{
+        font-size: 3em;
+    }
+    .loading-wrap{
+        position: absolute;
+        top:0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,.5);
+        z-index: 2000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .loading-wrap>span{
+        animation: ro linear 1s infinite;
+    }
+    @keyframes ro {
+        0%{transform: rotate(0)}
+        100%{transform: rotate(360deg)}
+    }
+    .none{
+        display: none;
+    }
+    input.input-error{
+        border:1px solid #FF6666;
+    }
+    .bg-error{
+        background-color: rgba(255,102,102,.8);
+    }
+    .white-text{
+        color:white;
+    }
+    .black-text{
+        color:black;
+    }
+    .toast{
+        position: fixed;
+        z-index: 1000;
+        top:50px;
+        left: 50%;
+        margin-left: -180px;
+        width: 360px;
+        height: 50px;
+        border-radius: 10px;
+        color: white;
+    }
+    .toast p{
+        font-size: 20px;
+        color: white;
+        text-align: center;
+        margin-bottom: 0;
+        height: 100%;
+        line-height: 50px;
+    }
+    .toast .close{
+        position: absolute;
+        top:5px;
+        right: 5px;
+        font-size: 25px;
+    }
+    .form-group{
+        margin-bottom: 20px;
+    }
+    .flex{
+        display: flex;
+    }
+    div.bg-container{
+        height: 100vh;
+        background: url("../img/earth44.jpg") no-repeat center/cover;
+    }
+    @media screen and (max-width: 1440px){
+        div.bg-container{
+            height: 100vh;
+            background: url("../img/earth33.jpg") no-repeat center/cover;
+        }
+    }
+    @media screen and (max-width: 960px){
+        div.bg-container{
+            height: 100vh;
+            background: url("../img/earth11.jpg") no-repeat center/cover;
+        }
+        div.bg-container .login-box{
+            background: none;
+        }
+    }
+    .login-title{
+        position: fixed;
+        top:15px;
+        width: 100%;
+    }
+    .login-title h1{
+        color: #87cefa;
+    }
+    .bg-black{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,.5);
+    }
+    .login-box{
+        position: fixed;
+        bottom: 100px;
+        width: 400px;
+        left: 50%;
+        margin-left: -200px;
+        z-index: 1000;
+
+        padding:50px 10px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 10px;
+    }
+    .login-box .form-group label{
+        color:white;
+        font-size: 18px;
+        font-weight: normal;
+    }
+    .input{
+        width: 100%;
+        background-color: transparent;
+        border: none;
+        height: 40px;
+        box-shadow: 0 1px 2px 0 #696969;
+        color:white;
+        padding:8px 5px;
+        font-size: 16px;
+        border-radius: 3px;
+    }
+    .input:focus{
+        outline:none;
+    }
+    .function-wrap .flex div{
+        width: 50%;
+    }
+    .login-action-wrap{
+        display: flex;
+        justify-content: center;
+    }
+    .login-action-wrap button{
+        margin: 10px 0;
+        border-radius: 8px;
+        border: none;
+        background:linear-gradient(to right,#4169E1,#1E90ff);
+        width: 100%;
+        height:50px;
+        color: white;
+        outline: none;
+        z-index: 200;
+    }
+
+    .function-wrap .flex div.remember-wrap{
+        height: 35px;
+        display: flex;
+        align-items: center;
+    }
+    .function-wrap .flex div.forget-wrap>a{
+        color: white;
+        line-height: 35px;
+    }
+    .function-wrap .flex div.remember-wrap>i{
+        color:#c0c0c0;
+    }
+    .function-wrap .flex div.remember-wrap>input[type='checkbox']{
+        display: none;
+    }
+    .function-wrap .flex div.remember-wrap>label{
+        display: inline-block;
+        width: 50px;
+        height: 25px;
+        border-radius: 20px;
+        margin-bottom: 0;
+        background: #696969;
+        margin-right: 10px;
+        position: relative;
+    }
+    #remember:checked+label:after{
+        transform: translateX(100%);
+    }
+    #remember:checked+label{
+        background: #00bfff;
+    }
+    .function-wrap .flex div.remember-wrap>label:after{
+        position: absolute;
+        content: "";
+        background: white;
+        top:0;
+        left: 0;
+        width: 50%;
+        height: 100%;
+        border-radius: 50%;
+        transition: all ease 0.3s;
+    }
+</style>
+<body>
+<div class="bg-container">
+    <div class="loading-wrap hidden">
+        <span class="glyphicon glyphicon-repeat fa-3x white-text"></span>
+    </div>
+    <div id="toast" class="toast none bg-error animated">
+        <p></p>
+        <button type="button" id="close-toast" class="close" aria-label="Close">
+            <span class="black-text" aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="bg-black"></div>
+    <div class="login-title">
+        <h1 class="text-center">《应用水文地球化学》</h1>
+    </div>
+    <div class="login-box container-fluid">
+        <form action="" id="loginForm">
+            <div class="form-group">
+                <label for="account">帐号：</label>
+                <input id="account" type="text" name="account" class="input">
+            </div>
+            <div class="form-group">
+                <label for="password">密码：</label>
+                <input id="password" type="password" name="password" class="input">
+            </div>
+            <div class="form-group function-wrap">
+                <div class="flex">
+                    <div class="remember-wrap">
+                        <input type="checkbox" checked name="remember" id="remember">
+                        <label for="remember"></label>
+                        <i>记住我</i>
+                    </div>
+                    <div class="forget-wrap text-right">
+                        <a href="">忘记密码？</a>
+                    </div>
+                </div>
+            </div>
+            <div class="login-action-wrap">
+                <button class="custom-btn" type="button" id="onSubmit">登录</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script src="../plugin/jquery/jquery-3.2.1.min.js"></script>
+<script src="../plugin/bootstrap3/bootstrap.min.js"></script>
+<script>
+    $(function () {
+        var account=$('#account');
+        var password=$('#password');
+        var submit=$('#onSubmit');
+        var toast=$('#toast');
+        var closeToast=$('#close-toast');
+
+        var formData=$('#loginForm');
+
+        $(account)[0].focus();
+
+        $(account).focus(function () {
+            $(this).removeClass('input-error');
+        });
+        $(password).focus(function () {
+            $(this).removeClass('input-error');
+        });
+
+        var closetoast=function () {
+            $(toast).removeClass('bounceIn').addClass('fadeOut');
+        };
+        var opentoast=function (message) {
+            $(toast).removeClass('none fadeOut').addClass('bounceIn');
+            $(toast).children('p').text(message);
+        };
+        var inputError=function (target) {
+            $(target).addClass('input-error');
+        };
+
+        $(closeToast).click(function () {
+            closetoast();
+        });
+
+        $(submit).click(function () {
+
+            if($(account).val()==''){
+                opentoast('帐号不能为空!');
+                inputError(account);
+                setTimeout(function () {
+                    closetoast();
+                },3000)
+            }
+            else{
+                if($(password).val()==''){
+                    opentoast('密码不能为空!');
+                    inputError(password);
+                    setTimeout(function () {
+                        closetoast();
+                    },3000)
+                }
+            }
+
+            console.log($(formData).serializeArray());
+        })
+    })
+</script>
+</html>
