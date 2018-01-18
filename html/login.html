@@ -8,23 +8,11 @@
     <link rel="stylesheet" href="../plugin/normalizeCss/normalize.css">
     <link rel="stylesheet" href="../plugin/animate/animate.css">
     <link rel="stylesheet" href="../plugin/bootstrap3/bootstrap.css">
+    <link rel="stylesheet" href="../css/public.css">
     <link rel="stylesheet" href="../plugin/bootstrap3/bootstrap-theme.min.css">
     <title>应用水文地球化学</title>
 </head>
 <style>
-    body{
-        padding:0;
-        margin:0;
-        min-height: 100vh;
-        background-color: black;
-        position: relative;
-    }
-    .fa-2x{
-        font-size: 2em;
-    }
-    .fa-3x{
-        font-size: 3em;
-    }
     .loading-wrap{
         position: absolute;
         top:0;
@@ -44,54 +32,15 @@
         0%{transform: rotate(0)}
         100%{transform: rotate(360deg)}
     }
-    .none{
-        display: none;
-    }
     input.input-error{
         border:1px solid #FF6666;
-    }
-    .bg-error{
-        background-color: rgba(255,102,102,.8);
-    }
-    .white-text{
-        color:white;
-    }
-    .black-text{
-        color:black;
-    }
-    .toast{
-        position: fixed;
-        z-index: 1000;
-        top:50px;
-        left: 50%;
-        margin-left: -180px;
-        width: 360px;
-        height: 50px;
-        border-radius: 10px;
-        color: white;
-    }
-    .toast p{
-        font-size: 20px;
-        color: white;
-        text-align: center;
-        margin-bottom: 0;
-        height: 100%;
-        line-height: 50px;
-    }
-    .toast .close{
-        position: absolute;
-        top:5px;
-        right: 5px;
-        font-size: 25px;
     }
     .form-group{
         margin-bottom: 20px;
     }
-    .flex{
-        display: flex;
-    }
     div.bg-container{
         height: 100vh;
+        overflow: hidden;
         background: url("../img/earth44.jpg") no-repeat center/cover;
     }
     @media screen and (max-width: 1440px){
@@ -105,7 +54,7 @@
             height: 100vh;
             background: url("../img/earth11.jpg") no-repeat center/cover;
         }
-        div.bg-container .login-box{
+        div.bg-container .login-box,div.bg-container .reset-box{
             background: none;
         }
     }
@@ -117,13 +66,13 @@
     .login-title h1{
         color: #87cefa;
     }
-    .bg-black{
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,.5);
+    .slideToLeft{
+        transform: translateX(-100vw);
     }
-    .login-box{
+    .slideToRight{
+        transform: translateX(100vw);
+    }
+    .login-box,.reset-box{
         position: fixed;
         bottom: 100px;
         width: 400px;
@@ -134,8 +83,12 @@
         padding:50px 10px;
         background: rgba(255,255,255,0.1);
         border-radius: 10px;
+        transition: all ease 0.5s;
     }
-    .login-box .form-group label{
+    div.reset-box{
+        left: 150%;
+    }
+    .form-group label{
         color:white;
         font-size: 18px;
         font-weight: normal;
@@ -145,14 +98,11 @@
         background-color: transparent;
         border: none;
         height: 40px;
-        box-shadow: 0 1px 2px 0 #696969;
+        box-shadow: 0 1px 1px 0 white;
         color:white;
         padding:8px 5px;
         font-size: 16px;
         border-radius: 3px;
-    }
-    .input:focus{
-        outline:none;
     }
     .function-wrap .flex div{
         width: 50%;
@@ -161,16 +111,22 @@
         display: flex;
         justify-content: center;
     }
-    .login-action-wrap button{
-        margin: 10px 0;
-        border-radius: 8px;
-        border: none;
-        background:linear-gradient(to right,#4169E1,#1E90ff);
-        width: 100%;
+    .login-action-wrap.space-between{
+        justify-content: space-between;
+    }
+    .custom-btn{
         height:50px;
         color: white;
         outline: none;
         z-index: 200;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: none;
+        width: 40%;
+    }
+
+    .custom-sigle-btn{
+        width: 100%;
     }
 
     .function-wrap .flex div.remember-wrap{
@@ -218,7 +174,7 @@
 </style>
 <body>
 <div class="bg-container">
-    <div class="loading-wrap hidden">
+    <div id="loading" class="loading-wrap animated none">
         <span class="glyphicon glyphicon-repeat fa-3x white-text"></span>
     </div>
     <div id="toast" class="toast none bg-error animated">
@@ -227,11 +183,11 @@
             <span class="black-text" aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="bg-black"></div>
+    <div class="loading-bg-black"></div>
     <div class="login-title">
         <h1 class="text-center">《应用水文地球化学》</h1>
     </div>
-    <div class="login-box container-fluid">
+    <div id="loginbox" class="login-box container-fluid">
         <form action="" id="loginForm">
             <div class="form-group">
                 <label for="account">帐号：</label>
@@ -249,12 +205,28 @@
                         <i>记住我</i>
                     </div>
                     <div class="forget-wrap text-right">
-                        <a href="">忘记密码？</a>
+                        <a href="javascript:;" id="forgetPassword">忘记密码？</a>
                     </div>
                 </div>
             </div>
             <div class="login-action-wrap">
-                <button class="custom-btn" type="button" id="onSubmit">登录</button>
+                <button class="custom-btn custom-sigle-btn btn-bg-blue" type="button" id="onSubmit">登录</button>
+            </div>
+        </form>
+    </div>
+    <div id="resetbox" class="reset-box container-fluid">
+        <form action="" id="resetForm">
+            <div class="form-group">
+                <label for="resetaccount">帐号：</label>
+                <input id="resetaccount" type="text" name="account" class="input">
+            </div>
+            <div class="form-group">
+                <label for="resetpassword">密码：</label>
+                <input id="resetpassword" type="password" name="password" class="input">
+            </div>
+            <div class="login-action-wrap space-between">
+                <button class="custom-btn btn-bg-green " type="button" id="onSubmitReset">修改</button>
+                <button class="custom-btn btn-bg-blue " type="button" id="returnToLogin">返回登录</button>
             </div>
         </form>
     </div>
@@ -269,6 +241,12 @@
         var submit=$('#onSubmit');
         var toast=$('#toast');
         var closeToast=$('#close-toast');
+        var loading=$('#loading');
+        var forgetPassword=$('#forgetPassword');
+        var returnToLogin=$('#returnToLogin');
+        var loginbox=$('#loginbox');
+        var resetbox=$('#resetbox');
+        var resetaccount=$('#resetaccount');
 
         var formData=$('#loginForm');
 
@@ -291,6 +269,22 @@
         var inputError=function (target) {
             $(target).addClass('input-error');
         };
+        var showLoaing=function () {
+            $(loading).removeClass('none').addClass('zoomIn');
+        };
+        var hideLoading=function () {
+            $(loading).removeClass('zoomIn').addClass('fadeOut none');
+        };
+
+        $(forgetPassword).click(function () {
+            $(loginbox).addClass('slideToLeft');
+            $(resetbox).addClass('slideToLeft');
+            $(resetaccount)[0].focus();
+        });
+        $(returnToLogin).click(function () {
+            $(loginbox).removeClass('slideToLeft');
+            $(resetbox).removeClass('slideToLeft');
+        });
 
         $(closeToast).click(function () {
             closetoast();
@@ -313,8 +307,21 @@
                         closetoast();
                     },3000)
                 }
+                else{
+                    showLoaing();
+                    if($(password).val()!='10086'){
+                        setTimeout(function () {
+                            inputError(password);
+                            inputError(account);
+                            opentoast('密码错误!');
+                            setTimeout(function () {
+                                closetoast();
+                            },3000)
+                            hideLoading();
+                        },3000);
+                    }
+                }
             }
-
             console.log($(formData).serializeArray());
         })
     })

@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../plugin/normalizeCss/normalize.css">
+    <link rel="stylesheet" href="../plugin/animate/animate.css">
+    <link rel="stylesheet" href="../plugin/bootstrap3/bootstrap.css">
+    <link rel="stylesheet" href="../css/public.css">
+    <link rel="stylesheet" href="../plugin/bootstrap3/bootstrap-theme.min.css">
+    <title>《应用水文地球化学》</title>
+</head>
+<style>
+    nav {
+        height: 60px;
+        overflow: hidden;
+        position: fixed;
+        top:0;
+        width: 100vw;
+        color: black;
+    }
+    .nav-wrap{
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    nav h3{
+        margin-left: 15px;
+    }
+    nav .topbarFun-wrap {
+        align-items: center;
+        position: absolute;
+        height: 100%;
+        top:0;
+        right: 15px;
+    }
+    nav .left-fun{
+        line-height: 60px;
+        position: absolute;
+        left: 15px;
+        display: none;
+    }
+
+    nav .topbarFun-wrap span{
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 10px;
+    }
+    nav .topbarFun-wrap span:last-of-type{
+        margin-right: 0;
+    }
+
+    nav .topbarFun-wrap .img-wrap {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .sideBar{
+        position: fixed;
+        top:60px;
+        left: 0;
+        width: 200px;
+        background-color: #333333;
+        min-height: calc(100vh - 60px);
+        border-radius: 2px;
+        transform: translateX(-125px);
+        transition: all ease-out 0.2s;
+    }
+    .sideBar:hover{
+        transform: translateX(0);
+    }
+    .toggleSideBar{
+        transform: translateX(0);
+    }
+    .sideBar ul{
+        margin: 35px 15px 0 0;
+        padding:0;
+    }
+    .sideBar ul li{
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+    .sideBar ul li .icon-box{
+        width: 42px;
+        height: 42px;
+        background-color: rgba(0,0,0,.3);
+        justify-content: center;
+        align-items: center;
+        border-radius: 2px;
+    }
+    .sideBar ul li .icon-box.active-box{
+        background-color: #5fbe8c;
+    }
+    .sideBar ul li .link-wrap{
+        width: calc( 100% - 40px);
+        line-height: 45px;
+    }
+    .sideBar ul li .link-wrap a{
+        display: inline-block;
+        height: 100%;
+        width: calc(100% - 20px);
+        margin-left: 20px;
+        color: #afafaf;
+        transition: all ease 0.2s;
+    }
+    .sideBar ul li .link-wrap a:hover{
+        color:white;
+    }
+    .rightBar{
+        position: fixed;
+        top:0;
+        right: 0;
+        width: 300px;
+        min-height: 100vh;
+        border-radius: 2px;
+        transition: all ease-out 0.2s;
+        background-color: #a9a9a9;
+    }
+    .rightBar .tab{
+        align-items: center;
+        justify-content: space-around;
+        background-color: #333333;
+        height: 60px;
+    }
+    .rightBar .tab .close{
+        width: 25%;
+        height: 100%;
+    }
+    .rightBar .tab .close i{
+        margin:15px 0 0 15px;
+    }
+    .rightBar .tab p{
+        margin-bottom: 0;
+        height: 100%;
+        width: 25%;
+        line-height: 60px;
+    }
+
+    @media screen and (max-width: 768px){
+        nav .nav-wrap{
+            justify-content: center;
+        }
+        nav h3{
+            font-size: 20px;
+            margin-left: 0;
+        }
+        nav .topbarFun-wrap{
+            right: 0;
+        }
+        nav .topbarFun-wrap .name,nav .topbarFun-wrap .img-wrap{
+            display: none;
+        }
+        nav .left-fun{
+            display: block;
+        }
+    }
+</style>
+<body>
+<div>
+    <nav>
+        <div class="nav-wrap flex">
+        <div class="left-fun"><span class="glyphicon glyphicon-align-left"></span></div>
+        <h3>《应用水文地球化学》</h3>
+        <div class="topbarFun-wrap flex">
+            <span class="name">David</span>
+            <span class="img-wrap"><img src="../img/Wolf.jpg" width="50" height="50" alt="头像"></span>
+            <span class="glyphicon glyphicon-th"></span>
+        </div>
+        </div>
+    </nav>
+    <div class="sideBar" id="sideBar">
+        <ul>
+            <li>
+                <div class="link-wrap">
+                    <a class="link text-left" href="javascript:;">Page1</a>
+                </div>
+                <div class="icon-box active-box flex">
+                    <i class="glyphicon glyphicon-home white-text fa-2x noCusor"></i>
+                </div>
+            </li>
+            <li>
+                <div class="link-wrap">
+                    <a class="link text-left" href="javascript:;">Page2</a>
+                </div>
+                <div class="icon-box flex">
+                    <i class="glyphicon glyphicon-home white-text fa-2x noCusor"></i>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="rightBar" id="rightBar">
+        <div class="tab flex">
+            <div class="close">
+                <i class="glyphicon glyphicon-chevron-right white-text"></i>
+            </div>
+            <p>PPT</p>
+            <p>视频</p>
+            <p>聊天</p>
+        </div>
+        <ul>
+
+        </ul>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+
+    })
+</script>
+</html>
