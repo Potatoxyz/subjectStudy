@@ -9,6 +9,12 @@ body{
 ul li{
     list-style: none;
 }
+.right{
+    float:right;
+}
+.left{
+    float:left;
+}
 .noCusor{
      cursor: default!important;
  }
@@ -26,6 +32,9 @@ a:hover{
 .glyphicon{
     cursor: pointer;
 }
+.fa-1-5x{
+    font-size: 1.5em;
+}
 .fa-2x{
     font-size: 2em;
 }
@@ -35,8 +44,17 @@ a:hover{
 .none{
     display: none!important;
 }
+.bg-primary{
+    background-color: rgba(95,190,140,.8);
+}
 .bg-error{
     background-color: rgba(255,102,102,.8);
+}
+.bg-black{
+    background-color: rgba(0,0,0,.3);
+}
+.radius3{
+    border-radius: 3px;
 }
 .white-text{
     color:white;

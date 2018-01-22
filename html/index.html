@@ -8,174 +8,71 @@
     <link rel="stylesheet" href="../plugin/normalizeCss/normalize.css">
     <link rel="stylesheet" href="../plugin/animate/animate.css">
     <link rel="stylesheet" href="../plugin/bootstrap3/bootstrap.css">
+    <link rel="stylesheet" href="../plugin/slide/jquery.fullpage.css">
     <link rel="stylesheet" href="../css/public.css">
+    <link rel="stylesheet" href="../css/index-frame.css">
+    <link rel="stylesheet" href="../css/index-flexiable.css">
     <link rel="stylesheet" href="../plugin/bootstrap3/bootstrap-theme.min.css">
     <title>《应用水文地球化学》</title>
 </head>
 <style>
-    nav {
-        height: 60px;
-        overflow: hidden;
-        position: fixed;
-        top:0;
-        width: 100vw;
-        color: black;
+    .rightBar .action{
+        padding:8px;
     }
-    .nav-wrap{
-        position: relative;
-        width: 100%;
-        height: 100%;
-    }
-    nav h3{
-        margin-left: 15px;
-    }
-    nav .topbarFun-wrap {
-        align-items: center;
-        position: absolute;
-        height: 100%;
-        top:0;
-        right: 15px;
-    }
-    nav .left-fun{
-        line-height: 60px;
-        position: absolute;
-        left: 15px;
-        display: none;
-    }
-
-    nav .topbarFun-wrap span{
-        width: 50px;
-        height: 50px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-right: 10px;
-    }
-    nav .topbarFun-wrap span:last-of-type{
-        margin-right: 0;
-    }
-
-    nav .topbarFun-wrap .img-wrap {
+    .rightBar .action>span{
         display: inline-block;
-        width: 50px;
-        height: 50px;
+        padding:10px;
         border-radius: 50%;
-        overflow: hidden;
     }
-
-    .sideBar{
-        position: fixed;
-        top:60px;
-        left: 0;
-        width: 200px;
-        background-color: #333333;
-        min-height: calc(100vh - 60px);
-        border-radius: 2px;
-        transform: translateX(-125px);
-        transition: all ease-out 0.2s;
+    .rightBar .file-list{
+        padding:0 8px;
     }
-    .sideBar:hover{
-        transform: translateX(0);
-    }
-    .toggleSideBar{
-        transform: translateX(0);
-    }
-    .sideBar ul{
-        margin: 35px 15px 0 0;
-        padding:0;
-    }
-    .sideBar ul li{
-        height: 45px;
+    .rightBar .file-list li{
         display: flex;
         align-items: center;
-        justify-content: center;
-        margin-bottom: 15px;
+        border-radius:5px;
+        padding:5px;
+        background: linear-gradient(to bottom,#000,#696969);
     }
-    .sideBar ul li .icon-box{
-        width: 42px;
-        height: 42px;
-        background-color: rgba(0,0,0,.3);
-        justify-content: center;
-        align-items: center;
-        border-radius: 2px;
+    .rightBar .file-list li .file-icon,.rightBar .file-list li .editFileName{
+        width: 15%;
+        text-align: center;
     }
-    .sideBar ul li .icon-box.active-box{
-        background-color: #5fbe8c;
-    }
-    .sideBar ul li .link-wrap{
-        width: calc( 100% - 40px);
-        line-height: 45px;
-    }
-    .sideBar ul li .link-wrap a{
-        display: inline-block;
-        height: 100%;
-        width: calc(100% - 20px);
-        margin-left: 20px;
-        color: #afafaf;
-        transition: all ease 0.2s;
-    }
-    .sideBar ul li .link-wrap a:hover{
-        color:white;
-    }
-    .rightBar{
-        position: fixed;
-        top:0;
-        right: 0;
-        width: 300px;
-        min-height: 100vh;
-        border-radius: 2px;
-        transition: all ease-out 0.2s;
-        background-color: #a9a9a9;
-    }
-    .rightBar .tab{
-        align-items: center;
-        justify-content: space-around;
-        background-color: #333333;
-        height: 60px;
-    }
-    .rightBar .tab .close{
-        width: 25%;
-        height: 100%;
-    }
-    .rightBar .tab .close i{
-        margin:15px 0 0 15px;
-    }
-    .rightBar .tab p{
-        margin-bottom: 0;
-        height: 100%;
-        width: 25%;
-        line-height: 60px;
-    }
+    .rightBar .file-list li p{
+        width: 70%;
+        text-align: center;
 
-    @media screen and (max-width: 768px){
-        nav .nav-wrap{
-            justify-content: center;
-        }
-        nav h3{
-            font-size: 20px;
-            margin-left: 0;
-        }
-        nav .topbarFun-wrap{
-            right: 0;
-        }
-        nav .topbarFun-wrap .name,nav .topbarFun-wrap .img-wrap{
-            display: none;
-        }
-        nav .left-fun{
-            display: block;
-        }
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+    .rightBar .tab-content{
+        position: absolute;
+        top:60px;
+        width: 300px;
+        height: calc( 100vh - 60px);
+        overflow: auto;
+        transition: all ease 0.5s;
+    }
+    .rightBar #tab1-content{
+        left: 0;
+    }
+    .rightBar #tab2-content{
+        left: 100%;
+    }
+    .rightBar #tab3-content{
+        left: 200%;
     }
 </style>
 <body>
-<div>
     <nav>
-        <div class="nav-wrap flex">
-        <div class="left-fun"><span class="glyphicon glyphicon-align-left"></span></div>
+        <div class="nav-wrap">
+        <div class="left-fun none"><span id="leftBar" class="glyphicon glyphicon-align-left radius3"></span></div>
         <h3>《应用水文地球化学》</h3>
         <div class="topbarFun-wrap flex">
             <span class="name">David</span>
             <span class="img-wrap"><img src="../img/Wolf.jpg" width="50" height="50" alt="头像"></span>
-            <span class="glyphicon glyphicon-th"></span>
+            <span id="rightFun" class="glyphicon glyphicon-th"></span>
         </div>
         </div>
     </nav>
@@ -202,21 +99,77 @@
     <div class="rightBar" id="rightBar">
         <div class="tab flex">
             <div class="close">
-                <i class="glyphicon glyphicon-chevron-right white-text"></i>
+                <i id="closeRightFun" class="glyphicon glyphicon-chevron-right white-text"></i>
             </div>
-            <p>PPT</p>
-            <p>视频</p>
-            <p>聊天</p>
-        </div>
-        <ul>
+            <input id="tab1" type="radio" value="tab1" name="tab" checked>
+            <label for="tab1">PDF</label>
 
+            <input id="tab2" type="radio" value="tab2" name="tab">
+            <label for="tab2">视频</label>
+
+            <input id="tab3" type="radio" value="tab3" name="tab">
+            <label for="tab3">聊天</label>
+        </div>
+
+        <div id="tab1-content" class="tab-content">
+        <div class="action">
+            <span class="bg-primary"><i class="glyphicon glyphicon-plus fa-2x"></i></span>
+            <span class="bg-error right"><i class="glyphicon glyphicon-trash fa-2x"></i></span>
+        </div>
+        <ul class="file-list">
+            <li>
+                <span class="file-icon"><i class="glyphicon glyphicon-folder-open fa-2x"></i></span>
+                <p>
+                    <span>filename</span>
+                </p>
+                <span class="editFileName"><i class="glyphicon glyphicon-pencil fa-1-5x"></i></span>
+            </li>
         </ul>
+        </div>
+        <div id="tab2-content" class="tab-content">
+            <input id="fileupload"  data-url="http://localhost:8081/upload" type="file" name="file[]">
+            <div id="progress">
+                <div class="bar" style="width: 0%;"></div>
+            </div>
+        </div>
+        <div id="tab3-content" class="tab-content">
+            <p>tab3</p>
+        </div>
+
     </div>
-</div>
+    <div class="body">
+
+    </div>
 </body>
+<script src="../plugin/jquery/jquery-3.2.1.min.js"></script>
+<script src="../plugin/bootstrap3/bootstrap.min.js"></script>
+<script src="../plugin/jquery-file-upload/jquery.ui.widget.js"></script>
+<script src="../plugin/jquery-file-upload/jquery.iframe-transport.js"></script>
+<script src="../plugin/jquery-file-upload/jquery.fileupload.js"></script>
+<script src="../js/index-toggleBar.js"></script>
+<script src="../js/index-rightBar-innerToggle.js"></script>
 <script>
     $(function () {
+        //初始化左右两边的bar切换
+        toggleBar();
+        //rightBar内部tab切换
+        rightBarInner();
 
+        $('#fileupload').fileupload({
+            dataType: 'json',
+            done: function (e, data) {
+                $.each(data.result.files, function (index, file) {
+                    $('<p/>').text(file.name).appendTo(document.body);
+                });
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('#progress .bar').css(
+                    'width',
+                    progress + '%'
+                );
+            }
+        });
     })
 </script>
 </html>

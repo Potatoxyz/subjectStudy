@@ -1,0 +1,58 @@
+@media screen and (max-width: 768px){
+    nav .nav-wrap{
+        justify-content: center;
+    }
+    nav h3{
+        font-size: 20px;
+        margin-left: 0;
+    }
+    nav .topbarFun-wrap{
+        right: 0;
+    }
+    nav .topbarFun-wrap .name,nav .topbarFun-wrap .img-wrap{
+        display: none;
+    }
+    nav .left-fun{
+        display: block!important;
+    }
+
+    div.rightBar{
+        width: 200px;
+    }
+    div.sideBar{
+        width: 100px;
+        transform: translateX(-55px);
+    }
+    div.sideBar ul{
+        margin-right: 5px;
+    }
+    div.sideBar ul li .icon-box{
+        width: 30px;
+        height: 30px;
+    }
+    div.sideBar ul li .icon-box .glyphicon{
+        font-size: 1.5em;
+    }
+    .sideBar ul li .link-wrap a{
+        margin-left: 5px;
+    }
+
+    div.rightBar .action{
+        padding:8px;
+    }
+    div.rightBar .action>span{
+        padding:8px;
+    }
+    div.rightBar .action>span i{
+        font-size: 1.5em;
+    }
+    div.rightBar .file-list li .glyphicon{
+        font-size: 1.5em;
+    }
+    div.rightBar .file-list li .editFileName .glyphicon{
+        font-size: 1.2em;
+    }
+    div.rightBar .tab-content{
+       width: 200px;
+    }
+}
