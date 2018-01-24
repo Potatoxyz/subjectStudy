@@ -177,12 +177,6 @@
     <div id="loading" class="loading-wrap animated none">
         <span class="glyphicon glyphicon-repeat fa-3x white-text"></span>
     </div>
-    <div id="toast" class="toast none bg-error animated">
-        <p></p>
-        <button type="button" id="close-toast" class="close" aria-label="Close">
-            <span class="black-text" aria-hidden="true">&times;</span>
-        </button>
-    </div>
     <div class="loading-bg-black"></div>
     <div class="login-title">
         <h1 class="text-center">《应用水文地球化学》</h1>
@@ -234,13 +228,12 @@
 </body>
 <script src="../plugin/jquery/jquery-3.2.1.min.js"></script>
 <script src="../plugin/bootstrap3/bootstrap.min.js"></script>
+<script src="../plugin/customToast/mytoast.js"></script>
 <script>
     $(function () {
         var account=$('#account');
         var password=$('#password');
         var submit=$('#onSubmit');
-        var toast=$('#toast');
-        var closeToast=$('#close-toast');
         var loading=$('#loading');
         var forgetPassword=$('#forgetPassword');
         var returnToLogin=$('#returnToLogin');
@@ -258,14 +251,6 @@
         $(password).focus(function () {
             $(this).removeClass('input-error');
         });
-
-        var closetoast=function () {
-            $(toast).removeClass('bounceIn').addClass('fadeOut');
-        };
-        var opentoast=function (message) {
-            $(toast).removeClass('none fadeOut').addClass('bounceIn');
-            $(toast).children('p').text(message);
-        };
         var inputError=function (target) {
             $(target).addClass('input-error');
         };
@@ -286,26 +271,24 @@
             $(resetbox).removeClass('slideToLeft');
         });
 
-        $(closeToast).click(function () {
-            closetoast();
-        });
 
         $(submit).click(function () {
 
             if($(account).val()==''){
-                opentoast('帐号不能为空!');
+                //opentoast('帐号不能为空!');
+                showToast($('.bg-container'),'帐号不可以空!');
                 inputError(account);
                 setTimeout(function () {
-                    closetoast();
+                    closeToast();
                 },3000)
             }
             else{
                 if($(password).val()==''){
-                    opentoast('密码不能为空!');
+                    showToast($('.bg-container'),'密码不能为空!');
                     inputError(password);
                     setTimeout(function () {
-                        closetoast();
-                    },3000)
+                        closeToast();
+                    },2000)
                 }
                 else{
                     showLoaing();
@@ -313,10 +296,10 @@
                         setTimeout(function () {
                             inputError(password);
                             inputError(account);
-                            opentoast('密码错误!');
+                            showToast($('.bg-container'),'密码错误!');
                             setTimeout(function () {
-                                closetoast();
-                            },3000)
+                                closeToast();
+                            },3000);
                             hideLoading();
                         },3000);
                     }

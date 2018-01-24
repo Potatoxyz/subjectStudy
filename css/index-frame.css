@@ -68,7 +68,7 @@ nav .topbarFun-wrap .img-wrap {
     left: 0;
     width: 200px;
     background-color: #333333;
-    height: 800px;
+    height: 100vh;
     border-radius: 2px;
     transform: translateX(-125px);
     transition: all ease-out 0.2s;
