@@ -5,7 +5,6 @@ function showToast(container,message) {
         '            <span class="black-text" aria-hidden="true">&times;</span>\n' +
         '        </button>\n' +
         '    </div>').appendTo(container);
-    console.log(dom);
     (dom)[0].style.cssText+='position: absolute;\n' +
         '    z-index: 1000;\n' +
         '    top:50px;\n' +

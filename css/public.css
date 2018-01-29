@@ -9,6 +9,9 @@ body{
 ul li{
     list-style: none;
 }
+.mb15{
+    margin-bottom: 15px;
+}
 .right{
     float:right;
 }
@@ -64,6 +67,12 @@ a:hover,a:link,a:visited,a:active{
 }
 .black-text{
     color:black;
+}
+.green-text{
+    color:#228b22;
+}
+.blue-text{
+    color:#00bfff;
 }
 .toast{
     position: fixed;
