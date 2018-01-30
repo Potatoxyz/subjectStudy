@@ -30,5 +30,5 @@ function closeToast() {
     $('#toast').removeClass('bounceIn').addClass('fadeOut');
     setTimeout(function () {
         $('#toast').remove();
-    },500)
+    },2000)
 }

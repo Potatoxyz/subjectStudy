@@ -272,15 +272,15 @@
             <div class="uploader black mb15">
                 <input type="text" class="filename" style="width: 180px;" readonly/>
                 <input type="button" name="file" class="button" style="width: 80px" value="Browse..."/>
-                <input type="file" size="30" name="file"/>
+                <input type="file" size="30" id="file" name="file" multiple/>
             </div>
             <div class="input-group select-files mb15">
                 <select name="" id="filesSelect" class="form-control">
                     <option value="_choice">请选择文件夹</option>
                 </select>
                 <span class="input-group-btn">
-                       <button class="btn btn-primary">全部上传</button>
-                    </span>
+                       <button class="btn btn-primary" type="button" id="submitAll">全部上传</button>
+                </span>
             </div>
 
             <div class="progress mb15 none" id="progress">
@@ -504,6 +504,69 @@
 
         //文件上传
         var previewId = 1;
+        var submitAll=$('#submitAll');
+        var formdata=new FormData();
+        var filesname=[];
+        $(submitAll).click(function (e) {
+
+            $.each(filesname,function (index) {
+              console.log(formdata.getAll(filesname[index]));
+            });
+            console.log('文件个数：'+filesname.length);
+            if(filesname.length>0){
+                console.log('提交');
+                $.ajax({
+                    url:'http://localhost:8081/upload',
+                    type:'POST',
+                    processData: false,  // 不处理数据，默认情况下，为了配合application/x-www-urlencoded,会把data转换成查询字符串
+                    contentType: false,   // 不设置内容类型
+                    data:formdata,
+                    error:function () {
+
+                    },
+                    success:function (res) {
+                        //上传成功后清空formData,和filename
+                        $.each(filesname,function (index) {
+                            formdata.delete(filesname[index]);
+                            //console.log(formdata.getAll(filesname[index]));
+                        });
+                        filesname=[];
+                        $('#tab2-content .info-wrap .upload-item').find('.mybg-primary')
+                            .text('')
+                            .addClass('glyphicon glyphicon-ok')
+                            .unbind('click');
+                        $('#tab2-content .info-wrap .upload-item').find('.mybg-primary').next().text('关闭');
+
+                        //把进度条样式还原
+                        $('#progress .progress-bar').css('width', '0%');
+                        console.log(res);
+                    },
+                    xhr:function () {
+                        var xhr = $.ajaxSettings.xhr();
+                        if(xhr.upload){
+                            $('#progress').removeClass('none');
+                            xhr.upload.addEventListener('progress', function (e) {
+                                percentage = parseInt(e.loaded / e.total * 100);
+                                $('#progress .progress-bar').css(
+                                    'width',
+                                    percentage + '%'
+                                );
+                                if (percentage === 100) {
+                                    $('#progress').addClass('none');
+                                }
+                            })
+                        }
+                        return xhr;
+                    }
+                })
+            }
+            else{
+                showToast($('#rightBar'),'请先选择文件!');
+                setTimeout(function () {
+                    closeToast();
+                },2000)
+            }
+        });
         $('#fileupload').fileupload({
             url: 'http://localhost:8081/upload',
 
@@ -524,12 +587,22 @@
                 if(data.result.result){
 
                 }
+                //单个上传成功后，把对应的filesname和formdata删除，
+                var index=filesname.indexOf(data.files[0].name);
+                if(index!==-1){
+                    filesname.splice(index,1);
+                    formdata.delete(filesname[index]);
+                }
+                console.log(filesname);
+
+                //item操作相对应修改
                 var target = $(data.context).text('')
                     .addClass('glyphicon glyphicon-ok')
                     .unbind('click');
-                target.next().text('关闭').click(function () {
-                    removeItem($(this).parents('.upload-item'));
-                })
+                target.next().text('关闭');
+
+                //把进度条样式还原
+                $('#progress .progress-bar').css('width', '0%');
             },
             fail: function (e, data) {
                 $(data.context).text('')
@@ -555,6 +628,27 @@
                     filesize = s2.toFixed(2);
                     unit = 'M';
                 }
+
+
+                //选择文件时去重
+                var files=formdata.getAll(data.files[0].name);
+                //console.log(data.files[0]);
+                //console.log(data.files[0].name);
+                if(files.length===0){
+                    formdata.append(data.files[0].name,data.files[0]);
+                    filesname.push(data.files[0].name);
+                }
+                else{
+                    showToast($('#rightBar'),'不能导入相同的文件:'+data.files[0].name);
+                        setTimeout(function () {
+                            closeToast();
+                        },2000);
+                        return false;
+                }
+
+
+
+
                 loadImage(
                     data.files[0],
                     function (img) {
@@ -575,7 +669,17 @@
                             });
                         $('<a href="javascript:;" class="mybg-warning">取消</a>').appendTo($('#' + previewId + ' ' + '.file-action'))
                             .click(function () {
+                                //dom移除
                                 removeItem($(this).parents('.upload-item'));
+                                //
+                                formdata.delete(data.files[0].name);
+                                //filesname移除
+                                if($(this).text()==='取消'){
+                                    var index=filesname.indexOf(data.files[0].name);
+                                    if(index!==-1){
+                                        filesname.splice(index,1);
+                                    }
+                                }
                             });
                         previewId++;
                     },
