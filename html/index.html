@@ -41,11 +41,11 @@
         margin-bottom: 15px;
     }
 
-    .file-list li.list-item  .checkbox-wrap {
+    .file-list li.list-item .checkbox-wrap {
         margin-right: 10px;
     }
 
-    .rightBar .file-list li.list-item  div.file-list-item {
+    .rightBar .file-list li.list-item div.file-list-item {
         display: flex;
         width: 95%;
         align-items: center;
@@ -54,12 +54,12 @@
         background: linear-gradient(to bottom, #000, #696969);
     }
 
-    .rightBar .file-list li.list-item  div.file-list-item .file-icon, .rightBar .file-list li .editFileName {
+    .rightBar .file-list li.list-item div.file-list-item .file-icon, .rightBar .file-list li .editFileName {
         width: 15%;
         text-align: center;
     }
 
-    .rightBar .file-list li.list-item  div.file-list-item p {
+    .rightBar .file-list li.list-item div.file-list-item p {
         width: 70%;
         text-align: center;
 
@@ -68,7 +68,7 @@
         white-space: nowrap;
     }
 
-    .rightBar .file-list li.list-item  p.filename-display-box {
+    .rightBar .file-list li.list-item p.filename-display-box {
         padding-left: 5px;
     }
 
@@ -156,31 +156,105 @@
         height: 20px;
     }
 
-    .rightBar .file-list li.files-detail{
+    .rightBar .file-list li.files-detail {
         margin-top: -15px;
     }
-    .rightBar .file-list li.files-detail .files-detail-icon{
+
+    .rightBar .file-list li.files-detail .files-detail-icon {
         margin-bottom: 5px;
     }
-    .rightBar .file-list li.files-detail .files-detail-icon i{
+
+    .rightBar .file-list li.files-detail .files-detail-icon i {
         padding-left: 25px;
         position: relative;
-        top:5px;
+        top: 5px;
     }
-    .rightBar .file-list li.files-detail ul.sigle-file-wrap{
+
+    .rightBar .file-list li.files-detail ul.sigle-file-wrap {
         padding-left: 30px;
     }
-    .rightBar .file-list li.files-detail ul.sigle-file-wrap li{
+
+    .rightBar .file-list li.files-detail ul.sigle-file-wrap li {
         border-radius: 5px;
         padding: 5px;
-        background: linear-gradient(to bottom, black,#00bfff);
+        background: linear-gradient(to bottom, black, #00bfff);
         width: 247px;
         margin-bottom: 10px;
     }
+
+    .alert-modal{
+        position: fixed;
+        overflow: hidden;
+        width: 400px;
+        min-height: 350px;
+        height: auto;
+        z-index: 1001;
+        left:50%;
+        margin-left: -200px;
+        top:50%;
+        margin-top: -175px;
+        background-color: white;
+        color:black;
+        text-align: center;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px 2px rgba(0,0,0,0.6);
+        border:1px solid white;
+        font-size: 16px;
+    }
+    .alert-modal .alert-close{
+        text-align: right;
+        padding:10px;
+    }
+    .alert-modal .alert-title i.glyphicon{
+        cursor: default;
+    }
+    .alert-modal .alert-title{
+        font-size: 5em;
+    }
+    .alert-modal .alert-body{
+        min-height: 130px;
+        padding:10px;
+        overflow-y: hidden;
+        overflow-x: scroll;
+    }
+    .alert-modal .alert-footer button:nth-of-type(1){
+        margin-right: 20px;
+    }
+    .alert-modal .alert-footer button{
+        padding:8px 15px;
+        font-size: 1em;
+    }
+    #screen{
+        position: fixed;
+        top:0;
+        min-width: 100vw;
+        min-height: 100vh;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,.5);
+        z-index: 1000;
+    }
 </style>
 <body>
-<nav>
-    <div class="nav-wrap">
+<div class="screen" id="screen"></div>
+<div class="alert-modal animated">
+    <div class="alert-close"><i class="glyphicon glyphicon-remove"></i></div>
+    <div class="alert-title">
+        <div class="alert-type">
+            <i class="glyphicon glyphicon-question-sign"></i>
+        </div>
+    </div>
+    <div class="alert-body">
+        <div class="alert-message">
+            <p>对吗?</p>
+        </div>
+    </div>
+    <div class="alert-footer">
+        <button class="btn btn-sm btn-primary">确定</button>
+        <button class="btn btn-sm btn-warning">取消</button>
+    </div>
+</div>
+<div class="nav-wrap">
         <div class="left-fun none"><span id="leftBar" class="glyphicon glyphicon-align-left radius3"></span></div>
         <h3>《应用水文地球化学》</h3>
         <div class="topbarFun-wrap flex">
@@ -189,7 +263,6 @@
             <span id="rightFun" class="glyphicon glyphicon-th"></span>
         </div>
     </div>
-</nav>
 <div class="sideBar" id="sideBar">
     <ul>
         <li>
@@ -256,15 +329,6 @@
                     </span>
                 </div>
             </li>
-            <!--<li class="files-detail mb15">-->
-                <!--<div class="files-detail-icon">-->
-                    <!--<i class="glyphicon glyphicon-hand-down fa-1-5x"></i>-->
-                <!--</div>-->
-                <!--<ul class="sigle-file-wrap">-->
-                    <!--<li class="text-center">a.jpg</li>-->
-                    <!--<li class="text-center">b.jpg</li>-->
-                <!--</ul>-->
-            <!--</li>-->
         </ul>
     </div>
     <div id="tab2-content" class="tab-content">
@@ -275,7 +339,7 @@
                 <input type="file" size="30" id="file" name="file" multiple/>
             </div>
             <div class="input-group select-files mb15">
-                <select name="" id="filesSelect" class="form-control">
+                <select name="filesWraper" id="filesSelect" class="form-control">
                     <option value="_choice">请选择文件夹</option>
                 </select>
                 <span class="input-group-btn">
@@ -321,23 +385,23 @@
 <script>
     $(function () {
         //禁用tab键
-        document.onkeydown=function(e){
-            var isie = (document.all) ? true:false;
+        document.onkeydown = function (e) {
+            var isie = (document.all) ? true : false;
             var key;
             var ev;
-            if(isie){//IE浏览器
+            if (isie) {//IE浏览器
                 key = window.event.keyCode;
                 ev = window.event;
-            }else{//火狐浏览器
+            } else {//火狐浏览器
                 key = e.which;
                 ev = e;
             }
-            if(key==9){//IE浏览器
-                if(isie){
-                    ev.keyCode=0;
-                    ev.returnValue=false;
-                }else{//火狐浏览器
-                    ev.which=0;
+            if (key == 9) {//IE浏览器
+                if (isie) {
+                    ev.keyCode = 0;
+                    ev.returnValue = false;
+                } else {//火狐浏览器
+                    ev.which = 0;
                     ev.preventDefault();
                 }
             }
@@ -350,77 +414,114 @@
         initInputFile();
 
         //1.右侧PDF页面第一次加载时获取文件夹及其子文件
-            //1-1.默认文件夹不可删除
-            //1-2.文件dom绑定展开和编辑事件
-            //1-3.添加文件夹
-            //1-4.删除文件夹
+        //1-1.默认文件夹不可删除
+        //1-2.文件dom绑定展开和编辑事件
+        //1-3.添加文件夹
+        //1-4.删除文件夹
         //2.右侧上传获取文件夹选项
 
-        var wraper=$('#tab1-content ul.file-list');
-        var firstdom=$('#tab1-content ul.file-list li.list-item:first-of-type');
+        var wraper = $('#tab1-content ul.file-list');
+        var firstdom = $('#tab1-content ul.file-list li.list-item:first-of-type');
         //查看子文件,传入的参数是 文件夹图标的父元素
-        var bindopenfile=function (_toggleopen) {
-            var open=false;
+        var bindopenfile = function (_toggleopen) {
+            var open = false;
             $(_toggleopen).click(function () {
-                if(!open){
+                if (!open) {
                     $(this).parents('li').next().slideDown();
-                    open=!open;
+                    open = !open;
                 }
-                else{
+                else {
                     $(this).parents('li').next().slideUp();
-                    open=!open;
+                    open = !open;
                 }
             })
         };
 
         //编辑文件夹名,传入的参数是 编辑图标的父元素，和确认图标的父元素
-        var editfilename=function (_edit,_confirmedit) {
-            var toggle=function (arr) {
-                $.each(arr,function (index,value) {
+        var editfilename = function (_edit, _confirmedit) {
+            var toggle = function (arr) {
+                $.each(arr, function (index, value) {
                     $(value).toggle();
                 });
             };
-            var text=$(_edit).siblings('p.filename-display-box').children('.filenametext');
-            var input=$(_edit).siblings('p.filename-display-box').children('.filenameinput');
-            $(input).children('input').bind('keypress',function (e) {
-                if(e.keyCode===13){
+            var text = $(_edit).siblings('p.filename-display-box').children('.filenametext');
+            var input = $(_edit).siblings('p.filename-display-box').children('.filenameinput');
+            $(input).children('input').bind('keypress', function (e) {
+                if (e.keyCode === 13) {
                     $(_confirmedit).trigger('click');
                 }
             });
             $(_edit).click(function () {
-                toggle([text,input,this,_confirmedit]);
+                toggle([text, input, this, _confirmedit]);
                 $($(input).children('input'))[0].focus();
             });
             $(_confirmedit).click(function () {
-                toggle([text,input,this,_edit]);
-                var inputvalue=$(input).children('input').val();
-                var beforetext=$(text).text();
-                if(inputvalue!==''){
+                toggle([text, input, this, _edit]);
+                var inputvalue = $(input).children('input').val();
+                var beforetext = $(text).text();
+                if (inputvalue !== '') {
                     $(input).children('input').val('');
                     updatefileoptions();
-                    $.post('http://localhost:8081/editfile',{beforetext:beforetext,aftertext:inputvalue},function (res) {
-                        $(text).text(inputvalue);
-                        console.log(res);
-                    })
+                    $.ajax({
+                        url:'http://localhost:8081/editfile',
+                        type:'POST',
+                        data:{beforetext: beforetext,aftertext: inputvalue},
+                        error:function () {
+                            showToast($('#rightBar'),'网络错误');
+                            setTimeout(function () {
+                                closeToast();
+                            },2000);
+                        },
+                        success:function (res) {
+                            console.log(res);
+                            if(res==='修改成功'){
+                                $(text).text(inputvalue);
+                                updatefileoptions();
+                            }
+                            if(res==='修改失败'){
+                                showToast($('#rightBar'),res);
+                                setTimeout(function () {
+                                    closeToast();
+                                },2000);
+                            }
+                        }
+                    });
                 }
             })
         };
 
         //添加文件夹
-        var filecode=1;
+        var filecode;
         var addFliebox = $('#addFliebox');
-        var addFile=function () {
-            var newfiletext='新建文件夹('+filecode+')';
-            var addnewdom=$(firstdom).clone();
-            var fileicon=$(addnewdom).find('.file-icon');
-            var editicon=$(addnewdom).find('.editicon').removeClass('none');
-            var confirmediticon=$(addnewdom).find('.confirmediticon');
-            $(addnewdom).find('.filenametext').text(newfiletext);
-            $(addnewdom).appendTo($(wraper));
-            bindopenfile(fileicon);
-            editfilename(editicon,confirmediticon);
-            $(editicon).trigger('click');
-            filecode++;
+        var addFile = function () {
+            var newfiletext = '新建文件夹(' + filecode + ')';
+            $.ajax({
+                url:'http://localhost:8081/addfile',
+                type:'POST',
+                data:{filename:newfiletext},
+                error:function () {
+                    showToast($('#rightBar'),'网络错误');
+                },
+                success:function (res) {
+                    console.log(res);
+                    if(res==='添加成功'){
+                        var addnewdom = $(firstdom).clone();
+                        var fileicon = $(addnewdom).find('.file-icon');
+                        var editicon = $(addnewdom).find('.editicon').removeClass('none');
+                        var confirmediticon = $(addnewdom).find('.confirmediticon');
+                        $(addnewdom).find('.filenametext').text(newfiletext);
+                        $(addnewdom).appendTo($(wraper));
+                        bindopenfile(fileicon);
+                        editfilename(editicon, confirmediticon);
+                        $(editicon).trigger('click');
+                    }
+                   else{
+                        showToast($('#rightBar'),res);
+                    }
+                }
+            });
+
+
         };
         $(addFliebox).click(function () {
             addFile();
@@ -434,7 +535,7 @@
                 $($('#tab1-content ul li.list-item')[index]).find("input[type='checkbox']").removeAttr('disabled');
                 $($('#tab1-content ul li.list-item')[index]).find(".custom-checkbox").css('cursor', 'default');
             });
-            $($('#tab1-content ul li.list-item')[0]).find("input[type='checkbox']").attr('disabled','true');
+            $($('#tab1-content ul li.list-item')[0]).find("input[type='checkbox']").attr('disabled', 'true');
             $($('#tab1-content ul li.list-item')[0]).find(".custom-checkbox").css('cursor', 'not-allowed');
             $('#tab1-content .file-list .checkbox-wrap').toggle();
             $(this).toggle();
@@ -442,9 +543,29 @@
         });
         $(dodelete).click(function () {
             var check = $("#tab1-content ul li.list-item .checkbox-wrap");
-            $(check).each(function () {
+            $(check).each(function (index) {
                 if ($(this).find('input').prop('checked')) {
-                    removeItem($(this).parents('li'),updatefileoptions);
+                    var targetname=$(this).next('.file-list-item').find('.filenametext').text();
+                    $.ajax({
+                        url:'http://localhost:8081/deletefile',
+                        type:'POST',
+                        data:{targetFile:targetname},
+                        error:function () {
+                            showToast($('#rightBar'),'网络错误');
+                        },
+                        success:function (res) {
+                            console.log(res);
+                            if(res.result){
+                                removeItem($($(check)[index]).parents('li'), updatefileoptions);
+                            }
+                            else{
+                                showToast($('#rightBar'),res.message);
+                                setTimeout(function () {
+                                    closeToast();
+                                },2000);
+                            }
+                        }
+                    });
                 }
             });
             $('#tab1-content .file-list .checkbox-wrap').toggle();
@@ -452,120 +573,187 @@
             $(deleteFileBox).toggle();
         });
         //根据左边的文件夹更新上传选择文件option
-        var updatefileoptions=function () {
-            var lis=$(wraper).children('li.list-item');
-            var select=$('#filesSelect');
+        var updatefileoptions = function (keepvalue) {
+            var lis = $(wraper).children('li.list-item');
+            var select = $('#filesSelect');
             $(select).children('option').remove();
             $(select).append('<option value="_choice">请选择文件夹</option>');
-            $.each(lis,function (index,value) {
-                var text=$(value).find('.filenametext').text();
-                $(select).append('<option value="_choice">'+text+'</option>');
-            })
+            $.each(lis, function (index, value) {
+                var text = $(value).find('.filenametext').text();
+                $(select).append('<option value=' + text + '>' + text + '</option>');
+            });
+            if(keepvalue){
+                $(select).val(keepvalue);
+            }
         };
-        updatefileoptions();
 
-        $.get('http://localhost:8081/filesList',function (result) {
-            var filesmock=result;
-            console.log(result);
-            var subfileshtmltext="<li class=\"files-detail mb15\" style='display: none;'>\n" +
-                "                <div class=\"files-detail-icon\">\n" +
-                "                    <i class=\"glyphicon glyphicon-hand-down fa-1-5x\"></i>\n" +
-                "                </div>\n" +
-                "                <ul class=\"sigle-file-wrap\"></ul>\n" +
-                "            </li>";
-            //根据返回数据初始化文件夹
-            $.each(filesmock,function (index,value) {
-                if(value.filename==='默认文件夹'){
-                    var fileicon=$(firstdom).find('.file-icon');
-                    var editicon=$(firstdom).find('.editicon').addClass('none');
-                    $(firstdom).after(subfileshtmltext);
-                    $.each(value.subfiles,function (index1,value1) {
-                        $(firstdom).next().find('.sigle-file-wrap').append("<li class='text-center'>"+value1+"</li>");
+        //获取服务端文件夹
+        var updateAllFiles=function (keepfileoption) {
+            $.ajax({
+                url: 'http://localhost:8081/filesList',
+                type: 'GET',
+                error: function () {
+                    console.log('网络连接错误');
+                    showToast($('body'), '网络连接错误');
+                },
+                success: function (res) {
+                    filecode=res.length+1;
+                    var filesmock = res;
+                    var existfilenames=$('#tab1-content .file-list .list-item');
+                    $.each(existfilenames,function (index) {
+                        if(index!==0){
+                            $(existfilenames[index]).remove();
+                        }
                     });
-                    bindopenfile(fileicon);
-                }
-                else{
-                    var newfilesdom=$(firstdom).clone();
-                    var otherfileicon=$(newfilesdom).find('.file-icon');
-                    var otherediticon=$(newfilesdom).find('.editicon').removeClass('none');
-                    var otherconfirmediticon=$(newfilesdom).find('.confirmediticon');
-                    $(newfilesdom).find('.filenametext').text(value.filename);
-                    $(wraper).append(newfilesdom);
-                    $(newfilesdom).after(subfileshtmltext);
-                    $.each(value.subfiles,function (index2,value2) {
-                        $(newfilesdom).next().find('.sigle-file-wrap').append("<li class='text-center'>"+value2+"</li>");
+                    console.log(res);
+                    var subfileshtmltext = "<li class=\"files-detail mb15\" style='display: none;'>\n" +
+                        "                <div class=\"files-detail-icon\">\n" +
+                        "                    <i class=\"glyphicon glyphicon-hand-down fa-1-5x\"></i>\n" +
+                        "                </div>\n" +
+                        "                <ul class=\"sigle-file-wrap\"></ul>\n" +
+                        "            </li>";
+                    //根据返回数据初始化文件夹
+                    $.each(filesmock, function (index, value) {
+                        if (value.filename === '默认文件夹') {
+                            var fileicon = $(firstdom).find('.file-icon');
+                            var editicon = $(firstdom).find('.editicon').addClass('none');
+                            $(firstdom).after(subfileshtmltext);
+                            $.each(value.subfiles, function (index1, value1) {
+                                $(firstdom).next().find('.sigle-file-wrap').append("<li class='text-center'>" + value1 + "</li>");
+                            });
+                            bindopenfile(fileicon);
+                        }
+                        else {
+                            var newfilesdom = $(firstdom).clone();
+                            var otherfileicon = $(newfilesdom).find('.file-icon');
+                            var otherediticon = $(newfilesdom).find('.editicon').removeClass('none');
+                            var otherconfirmediticon = $(newfilesdom).find('.confirmediticon');
+                            $(newfilesdom).find('.filenametext').text(value.filename);
+                            $(wraper).append(newfilesdom);
+                            $(newfilesdom).after(subfileshtmltext);
+                            $.each(value.subfiles, function (index2, value2) {
+                                $(newfilesdom).next().find('.sigle-file-wrap').append("<li class='text-center'>" + value2 + "</li>");
+                            });
+                            bindopenfile(otherfileicon);
+                            editfilename(otherediticon, otherconfirmediticon);
+                        }
                     });
-                    bindopenfile(otherfileicon);
-                    editfilename(otherediticon,otherconfirmediticon);
+                    //初始化上传文件的option
+                    if(keepfileoption){
+                        updatefileoptions(keepfileoption);
+                    }
+                    else{
+                        updatefileoptions();
+                    }
                 }
             });
-        });
+        };
+        updateAllFiles();
 
 
         //文件上传
-        var previewId = 1;
-        var submitAll=$('#submitAll');
-        var formdata=new FormData();
-        var filesname=[];
-        $(submitAll).click(function (e) {
-
-            $.each(filesname,function (index) {
-              console.log(formdata.getAll(filesname[index]));
-            });
-            console.log('文件个数：'+filesname.length);
-            if(filesname.length>0){
-                console.log('提交');
-                $.ajax({
-                    url:'http://localhost:8081/upload',
-                    type:'POST',
-                    processData: false,  // 不处理数据，默认情况下，为了配合application/x-www-urlencoded,会把data转换成查询字符串
-                    contentType: false,   // 不设置内容类型
-                    data:formdata,
-                    error:function () {
-
-                    },
-                    success:function (res) {
-                        //上传成功后清空formData,和filename
-                        $.each(filesname,function (index) {
-                            formdata.delete(filesname[index]);
-                            //console.log(formdata.getAll(filesname[index]));
-                        });
-                        filesname=[];
-                        $('#tab2-content .info-wrap .upload-item').find('.mybg-primary')
-                            .text('')
-                            .addClass('glyphicon glyphicon-ok')
-                            .unbind('click');
-                        $('#tab2-content .info-wrap .upload-item').find('.mybg-primary').next().text('关闭');
-
-                        //把进度条样式还原
-                        $('#progress .progress-bar').css('width', '0%');
-                        console.log(res);
-                    },
-                    xhr:function () {
-                        var xhr = $.ajaxSettings.xhr();
-                        if(xhr.upload){
-                            $('#progress').removeClass('none');
-                            xhr.upload.addEventListener('progress', function (e) {
-                                percentage = parseInt(e.loaded / e.total * 100);
-                                $('#progress .progress-bar').css(
-                                    'width',
-                                    percentage + '%'
-                                );
-                                if (percentage === 100) {
-                                    $('#progress').addClass('none');
-                                }
-                            })
-                        }
-                        return xhr;
-                    }
-                })
-            }
-            else{
-                showToast($('#rightBar'),'请先选择文件!');
+        //上传之前判断对应的文件夹有没有选择
+        var checkFileWraper=function () {
+            var selectedFilesWrap = $('#filesSelect').val();
+            if (selectedFilesWrap === '_choice' || !selectedFilesWrap) {
+                showToast($('#rightBar'), '请选择目标文件夹');
                 setTimeout(function () {
                     closeToast();
-                },2000)
+                }, 2000);
+                return false;
             }
+            else{
+                return true;
+            }
+        };
+        var previewId = 1;
+        var submitAll = $('#submitAll');
+        var formdata = new FormData();
+        var filesname = [];
+        $(submitAll).click(function (e) {
+            var selectedFilesWrap = $('#filesSelect').val();
+
+//            $.each(filesname,function (index) {
+//              console.log(formdata.getAll(filesname[index]));
+//            });
+
+            console.log('文件个数：' + filesname.length);
+
+            if (filesname.length > 0) {
+                console.log('提交');
+
+                if(checkFileWraper()){
+                    $.ajax({
+                        url: 'http://localhost:8081/targetFile',
+                        type: 'POST',
+                        data: {targetFile: selectedFilesWrap},
+                        success: function (res) {
+                            console.log(res);
+                            //先判断文件夹有没有问题，再提交进行文件上传
+
+                            $.ajax({
+                                url: 'http://localhost:8081/upload',
+                                type: 'POST',
+                                processData: false,  // 不处理数据，默认情况下，为了配合application/x-www-urlencoded,会把data转换成查询字符串
+                                contentType: false,   // 不设置内容类型
+                                data: formdata,
+                                error: function () {
+                                },
+                                success: function (res) {
+                                    //上传成功后清空formData,和filename
+                                    $.each(filesname, function (index) {
+                                        formdata.delete(filesname[index]);
+                                        //console.log(formdata.getAll(filesname[index]));
+                                    });
+                                    filesname = [];
+                                    $('#tab2-content .info-wrap .upload-item').find('.mybg-primary')
+                                        .text('')
+                                        .addClass('glyphicon glyphicon-ok')
+                                        .unbind('click');
+                                    $('#tab2-content .info-wrap .upload-item').find('.mybg-primary').next().text('关闭');
+
+                                    //把进度条样式还原
+                                    $('#progress .progress-bar').css('width', '0%');
+
+                                    //更新文件夹视图
+                                    updateAllFiles(selectedFilesWrap);
+                                    console.log(res);
+                                },
+                                xhr: function () {
+                                    var xhr = $.ajaxSettings.xhr();
+                                    if (xhr.upload) {
+                                        $('#progress').removeClass('none');
+                                        xhr.upload.addEventListener('progress', function (e) {
+                                            percentage = parseInt(e.loaded / e.total * 100);
+                                            $('#progress .progress-bar').css(
+                                                'width',
+                                                percentage + '%'
+                                            );
+                                            if (percentage === 100) {
+                                                $('#progress').addClass('none');
+                                            }
+                                        })
+                                    }
+                                    return xhr;
+                                }
+                            })
+
+
+                        },
+                        error: function (res) {
+                            console.log(res);
+                        }
+                    });
+                }
+            }
+            else {
+                showToast($('#rightBar'), '请先选择图片!');
+                setTimeout(function () {
+                    closeToast();
+                }, 2000);
+                return false;
+            }
+
         });
         $('#fileupload').fileupload({
             url: 'http://localhost:8081/upload',
@@ -583,14 +771,15 @@
             },
             //上传结果
             done: function (e, data) {
+                var selectedFilesWrap = $('#filesSelect').val();
                 console.log(data.result.result);
-                if(data.result.result){
+                if (data.result.result) {
 
                 }
                 //单个上传成功后，把对应的filesname和formdata删除，
-                var index=filesname.indexOf(data.files[0].name);
-                if(index!==-1){
-                    filesname.splice(index,1);
+                var index = filesname.indexOf(data.files[0].name);
+                if (index !== -1) {
+                    filesname.splice(index, 1);
                     formdata.delete(filesname[index]);
                 }
                 console.log(filesname);
@@ -603,6 +792,9 @@
 
                 //把进度条样式还原
                 $('#progress .progress-bar').css('width', '0%');
+
+                //更新子文件夹视图
+                updateAllFiles(selectedFilesWrap);
             },
             fail: function (e, data) {
                 $(data.context).text('')
@@ -631,22 +823,20 @@
 
 
                 //选择文件时去重
-                var files=formdata.getAll(data.files[0].name);
+                var files = formdata.getAll(data.files[0].name);
                 //console.log(data.files[0]);
                 //console.log(data.files[0].name);
-                if(files.length===0){
-                    formdata.append(data.files[0].name,data.files[0]);
+                if (files.length === 0) {
+                    formdata.append(data.files[0].name, data.files[0]);
                     filesname.push(data.files[0].name);
                 }
-                else{
-                    showToast($('#rightBar'),'不能导入相同的文件:'+data.files[0].name);
-                        setTimeout(function () {
-                            closeToast();
-                        },2000);
-                        return false;
+                else {
+                    showToast($('#rightBar'), '不能导入相同的文件:' + data.files[0].name);
+                    setTimeout(function () {
+                        closeToast();
+                    }, 2000);
+                    return false;
                 }
-
-
 
 
                 loadImage(
@@ -665,7 +855,22 @@
                             .click(function () {
                                 data.context = $(this);
                                 $('#progress').removeClass('none');
-                                data.submit();
+                                if(checkFileWraper()){
+                                    var selectedFilesWrap = $('#filesSelect').val();
+                                    $.ajax({
+                                        url: 'http://localhost:8081/targetFile',
+                                        type: 'POST',
+                                        data: {targetFile: selectedFilesWrap},
+                                        error:function () {},
+                                        success:function (res) {
+                                            console.log(res);
+                                            data.submit();
+                                        }
+                                        });
+                                }
+                                else{
+                                    $('#progress').addClass('none');
+                                }
                             });
                         $('<a href="javascript:;" class="mybg-warning">取消</a>').appendTo($('#' + previewId + ' ' + '.file-action'))
                             .click(function () {
@@ -674,10 +879,10 @@
                                 //
                                 formdata.delete(data.files[0].name);
                                 //filesname移除
-                                if($(this).text()==='取消'){
-                                    var index=filesname.indexOf(data.files[0].name);
-                                    if(index!==-1){
-                                        filesname.splice(index,1);
+                                if ($(this).text() === '取消') {
+                                    var index = filesname.indexOf(data.files[0].name);
+                                    if (index !== -1) {
+                                        filesname.splice(index, 1);
                                     }
                                 }
                             });

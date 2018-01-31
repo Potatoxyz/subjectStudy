@@ -1,39 +1,33 @@
-nav {
-    height: 60px;
-    overflow: hidden;
-    position: fixed;
-    top:0;
-    width: 100vw;
-    color: black;
-    background-color: #FBF7F1;
-}
 p{
     margin-bottom: 0;
 }
 .nav-wrap{
-    position: relative;
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    top:0;
+    width: 100vw;
+    height: 60px;
     display: flex;
+    color: black;
     align-items: center;
+    z-index: 998;
 }
-nav h3{
+.nav-wrap h3{
     margin:0 0 0 15px;
 }
-nav .topbarFun-wrap {
+.nav-wrap .topbarFun-wrap {
     align-items: center;
     position: absolute;
     height: 100%;
     top:0;
     right: 15px;
 }
-nav .left-fun{
+.nav-wrap .left-fun{
     position: absolute;
     left: 15px;
     height: 60px;
     width: 28px;
 }
-nav .left-fun span{
+.nav-wrap .left-fun span{
     width: 28px;
     height:28px;
     line-height: 28px;
@@ -42,7 +36,7 @@ nav .left-fun span{
     vertical-align: top;
 }
 
-nav .topbarFun-wrap span{
+.nav-wrap .topbarFun-wrap span{
     width: 50px;
     height: 50px;
     display: flex;
@@ -50,11 +44,11 @@ nav .topbarFun-wrap span{
     align-items: center;
     margin-right: 10px;
 }
-nav .topbarFun-wrap span:last-of-type{
+.nav-wrap .topbarFun-wrap span:last-of-type{
     margin-right: 0;
 }
 
-nav .topbarFun-wrap .img-wrap {
+.nav-wrap .topbarFun-wrap .img-wrap {
     display: inline-block;
     width: 50px;
     height: 50px;
@@ -118,6 +112,7 @@ nav .topbarFun-wrap .img-wrap {
 }
 .rightBar{
     position: fixed;
+    z-index: 999;
     top:0;
     right: 0;
     width: 300px;

@@ -25,6 +25,9 @@ function showToast(container,message) {
         '    right: 5px;\n' +
         '    font-size: 25px;';
     (dom.children('p'))[0].innerText=message;
+    dom.children('button').click(function () {
+        closeToast();
+    })
 }
 function closeToast() {
     $('#toast').removeClass('bounceIn').addClass('fadeOut');
