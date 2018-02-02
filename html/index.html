@@ -181,79 +181,8 @@
         width: 247px;
         margin-bottom: 10px;
     }
-
-    .alert-modal{
-        position: fixed;
-        overflow: hidden;
-        width: 400px;
-        min-height: 350px;
-        height: auto;
-        z-index: 1001;
-        left:50%;
-        margin-left: -200px;
-        top:50%;
-        margin-top: -175px;
-        background-color: white;
-        color:black;
-        text-align: center;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px 2px rgba(0,0,0,0.6);
-        border:1px solid white;
-        font-size: 16px;
-    }
-    .alert-modal .alert-close{
-        text-align: right;
-        padding:10px;
-    }
-    .alert-modal .alert-title i.glyphicon{
-        cursor: default;
-    }
-    .alert-modal .alert-title{
-        font-size: 5em;
-    }
-    .alert-modal .alert-body{
-        min-height: 130px;
-        padding:10px;
-        overflow-y: hidden;
-        overflow-x: scroll;
-    }
-    .alert-modal .alert-footer button:nth-of-type(1){
-        margin-right: 20px;
-    }
-    .alert-modal .alert-footer button{
-        padding:8px 15px;
-        font-size: 1em;
-    }
-    #screen{
-        position: fixed;
-        top:0;
-        min-width: 100vw;
-        min-height: 100vh;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,.5);
-        z-index: 1000;
-    }
 </style>
 <body>
-<div class="screen" id="screen"></div>
-<div class="alert-modal animated">
-    <div class="alert-close"><i class="glyphicon glyphicon-remove"></i></div>
-    <div class="alert-title">
-        <div class="alert-type">
-            <i class="glyphicon glyphicon-question-sign"></i>
-        </div>
-    </div>
-    <div class="alert-body">
-        <div class="alert-message">
-            <p>对吗?</p>
-        </div>
-    </div>
-    <div class="alert-footer">
-        <button class="btn btn-sm btn-primary">确定</button>
-        <button class="btn btn-sm btn-warning">取消</button>
-    </div>
-</div>
 <div class="nav-wrap">
         <div class="left-fun none"><span id="leftBar" class="glyphicon glyphicon-align-left radius3"></span></div>
         <h3>《应用水文地球化学》</h3>
@@ -367,9 +296,7 @@
     </div>
 
 </div>
-<div class="body">
-
-</div>
+<div class="body"></div>
 </body>
 <script src="../plugin/jquery/jquery-3.2.1.min.js"></script>
 <script src="../plugin/bootstrap3/bootstrap.min.js"></script>
@@ -379,6 +306,7 @@
 <script src="../plugin/jquery-file-upload/jquery.iframe-transport.js"></script>
 <script src="../plugin/jquery-file-upload/jquery.fileupload.js"></script>
 <script src="../plugin/jquery-file-upload/load-image.all.min.js"></script>
+<script src="../plugin/alert/alert.js"></script>
 <script src="../js/index-toggleBar.js"></script>
 <script src="../js/public.js"></script>
 <script src="../js/index-rightBar-innerToggle.js"></script>
@@ -543,20 +471,51 @@
         });
         $(dodelete).click(function () {
             var check = $("#tab1-content ul li.list-item .checkbox-wrap");
+            var notemptyfileList=[];
             $(check).each(function (index) {
                 if ($(this).find('input').prop('checked')) {
                     var targetname=$(this).next('.file-list-item').find('.filenametext').text();
-                    $.ajax({
+                    $.each(filesmock,function (index,value) {
+                        if(value.filename===targetname){
+                            //console.log(targetname);
+                            if(value.subfiles.length>0){
+                                notemptyfileList.push(targetname);
+                            }
+                        }
+                    })
+//
+                }
+            });
+            //不管是确定还是取消删除，把checkbox勾选状态还原
+            $(check).each(function (index) {
+                var input=$(this).find('input');
+                input[0].checked=false;
+            });
+            if(notemptyfileList.length>0){
+                var result=showAlert(notemptyfileList.join()+'不是空文件夹，确定删除？');
+                result.then(function (d) {
+                    console.log(notemptyfileList.join());
+                    var data=notemptyfileList.join();
+                    if(d){
+                        $.ajax({
                         url:'http://localhost:8081/deletefile',
                         type:'POST',
-                        data:{targetFile:targetname},
+                        data:data,
+                        processData :false,
                         error:function () {
                             showToast($('#rightBar'),'网络错误');
                         },
                         success:function (res) {
                             console.log(res);
                             if(res.result){
-                                removeItem($($(check)[index]).parents('li'), updatefileoptions);
+                                notemptyfileList.forEach(function (value) {
+                                    var listitems=$('#tab1-content .file-list .list-item');
+                                    listitems.each(function (index, el) {
+                                        if(value===$(el).find('.filenametext').text()){
+                                            removeItem($(el), updatefileoptions);
+                                        }
+                                    })
+                                });
                             }
                             else{
                                 showToast($('#rightBar'),res.message);
@@ -566,8 +525,9 @@
                             }
                         }
                     });
-                }
-            });
+                    }
+                });
+            }
             $('#tab1-content .file-list .checkbox-wrap').toggle();
             $(this).toggle();
             $(deleteFileBox).toggle();
@@ -588,6 +548,7 @@
         };
 
         //获取服务端文件夹
+        var filesmock;
         var updateAllFiles=function (keepfileoption) {
             $.ajax({
                 url: 'http://localhost:8081/filesList',
@@ -598,7 +559,7 @@
                 },
                 success: function (res) {
                     filecode=res.length+1;
-                    var filesmock = res;
+                    filesmock = res;
                     var existfilenames=$('#tab1-content .file-list .list-item');
                     $.each(existfilenames,function (index) {
                         if(index!==0){
@@ -690,16 +651,17 @@
                         success: function (res) {
                             console.log(res);
                             //先判断文件夹有没有问题，再提交进行文件上传
-
                             $.ajax({
                                 url: 'http://localhost:8081/upload',
                                 type: 'POST',
                                 processData: false,  // 不处理数据，默认情况下，为了配合application/x-www-urlencoded,会把data转换成查询字符串
                                 contentType: false,   // 不设置内容类型
                                 data: formdata,
-                                error: function () {
+                                error: function (err) {
+                                    console.log(err);
                                 },
                                 success: function (res) {
+                                    console.log(res);
                                     //上传成功后清空formData,和filename
                                     $.each(filesname, function (index) {
                                         formdata.delete(filesname[index]);
@@ -717,7 +679,6 @@
 
                                     //更新文件夹视图
                                     updateAllFiles(selectedFilesWrap);
-                                    console.log(res);
                                 },
                                 xhr: function () {
                                     var xhr = $.ajaxSettings.xhr();
@@ -772,10 +733,7 @@
             //上传结果
             done: function (e, data) {
                 var selectedFilesWrap = $('#filesSelect').val();
-                console.log(data.result.result);
-                if (data.result.result) {
-
-                }
+                console.log(data.result);
                 //单个上传成功后，把对应的filesname和formdata删除，
                 var index = filesname.indexOf(data.files[0].name);
                 if (index !== -1) {
