@@ -22,3 +22,5 @@ var rightBarInner=function () {
         }
     })
 };
+//rightBar内部tab切换
+rightBarInner();

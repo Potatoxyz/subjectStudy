@@ -7,9 +7,10 @@ p{
     width: 100vw;
     height: 60px;
     display: flex;
-    color: black;
     align-items: center;
     z-index: 998;
+    color:white;
+    background: linear-gradient(to bottom, #000, #696969);
 }
 .nav-wrap h3{
     margin:0 0 0 15px;
@@ -66,6 +67,7 @@ p{
     border-radius: 2px;
     transform: translateX(-125px);
     transition: all ease-out 0.2s;
+    z-index: 1000;
 }
 .sideBar:hover{
     transform: translateX(0);

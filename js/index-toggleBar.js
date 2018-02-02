@@ -24,3 +24,5 @@ var toggleBar=function () {
         }
     })
 };
+//初始化左右两边的bar切换
+toggleBar();
