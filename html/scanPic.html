@@ -28,20 +28,14 @@
     }
 </style>
 <body>
-
 </body>
 <script src="../plugin/jquery/jquery-3.2.1.min.js"></script>
 <script src="../plugin/slide/jquery.fullpage.js"></script>
 <script>
     var initPage=function (anchors) {
-        var htmltext='<div id="fullpage">\n' +
-            '    <div class="section">\n' +
-            '        <div class="slide">\n' +
-            '            <img src="../pdf/test.jpg" alt="" id="t">\n' +
-            '        </div>\n' +
-            '    </div>\n' +
-            '</div>';
+        var htmltext='<div id="fullpage"><div class="section"></div></div>';
         $(htmltext).appendTo('body');
+        var picshtml='<div class="slide"><img src="" alt="暂时无法显示"></div>';
         window.parent.$('#playPic').prop('height','auto');
         initFullpage(anchors);
     };

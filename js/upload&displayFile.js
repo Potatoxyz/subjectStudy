@@ -12,8 +12,24 @@ var firstdom = $('#tab1-content ul.file-list li.list-item:first-of-type');
 //给一个文件夹绑定双击打开图片，给其子文件绑定锚点
 var bindPlayPic=function (item) {
     $(item).bind('dblclick',function () {
-        var anchors=['P1','P2'];
+        var anchors=[];
         var playPic=$('#playPic');
+        var targetfile=$(this).find('.filenametext').text();
+        console.log($(this).find('.filenametext').text());
+        $.ajax({
+            url:'http://localhost:8081/getPic',
+            type:'GET',
+            data:{data:targetfile},
+            error:function (err) {
+                console.log(err);
+            },
+            success:function (res) {
+                console.log(res);
+                res.forEach(function (value,index) {
+                    anchors.push('Pic'+index);
+                })
+            }
+        });
         $(playPic)[0].contentWindow.initPage(anchors);
     })
 };
