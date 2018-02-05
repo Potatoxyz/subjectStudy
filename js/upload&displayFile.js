@@ -10,34 +10,58 @@ var wraper = $('#tab1-content ul.file-list');
 var firstdom = $('#tab1-content ul.file-list li.list-item:first-of-type');
 
 //给一个文件夹绑定双击打开图片，给其子文件绑定锚点
-var bindPlayPic=function (item) {
-    $(item).bind('dblclick',function () {
-        var anchors=[];
-        var playPic=$('#playPic');
-        var targetfile=$(this).find('.filenametext').text();
-        console.log($(this).find('.filenametext').text());
-        $.ajax({
-            url:'http://localhost:8081/getPic',
-            type:'GET',
-            data:{data:targetfile},
-            error:function (err) {
-                console.log(err);
-            },
-            success:function (res) {
-                console.log(res);
-                res.forEach(function (value,index) {
+var playpic=function (toOpenfile) {
+    var anchors=[];
+    var playPic=$('#playPic');
+    console.log(toOpenfile);
+    $.ajax({
+        url:'http://172.20.1.146:8081/getPic',
+        type:'GET',
+        data:{data:toOpenfile},
+        error:function (err) {
+            console.log(err);
+        },
+        success:function (res) {
+            var srcs=[];
+            console.log(res);
+            if(res.result){
+                res.data.forEach(function (currentValue,index) {
                     anchors.push('Pic'+index);
-                })
+                    srcs.push(currentValue);
+                });
+                $(playPic)[0].contentWindow.initPage(anchors,srcs);
             }
-        });
-        $(playPic)[0].contentWindow.initPage(anchors);
+            else{
+                showToast($('body'),res.message);
+                setTimeout(function () {
+                    closeToast();
+                },5000)
+            }
+        }
+    });
+};
+var bindPlayPic=function (item) {
+    var targetfile=$(item).find('.filenametext').text();
+    //console.log(targetfile);
+    if(targetfile==='默认文件夹'){
+        targetfile='default';
+    }
+    $(item).bind('dblclick',function (e) {
+        playpic(targetfile);
+    });
+    $(item).bind('touchstart',function (e) {
+        var evtarget=e.target.tagName.toLowerCase();
+        if(evtarget!=='i'){
+            playpic(targetfile);
+        }
     })
 };
 
 //查看子文件,传入的参数是 文件夹图标的父元素
 var bindopenfile = function (_toggleopen) {
     var open = false;
-    $(_toggleopen).click(function () {
+    $(_toggleopen).click(function (e) {
+        e.stopPropagation();
         if (!open) {
             $(this).parents('li').next().slideDown();
             open = !open;
@@ -63,11 +87,13 @@ var editfilename = function (_edit, _confirmedit) {
             $(_confirmedit).trigger('click');
         }
     });
-    $(_edit).click(function () {
+    $(_edit).click(function (e) {
+        e.stopPropagation();
         toggle([text, input, this, _confirmedit]);
         $($(input).children('input'))[0].focus();
     });
-    $(_confirmedit).click(function () {
+    $(_confirmedit).click(function (e) {
+        e.stopPropagation();
         toggle([text, input, this, _edit]);
         var inputvalue = $(input).children('input').val();
         var beforetext = $(text).text();
@@ -75,7 +101,7 @@ var editfilename = function (_edit, _confirmedit) {
             $(input).children('input').val('');
             updatefileoptions();
             $.ajax({
-                url:'http://localhost:8081/editfile',
+                url:'http://172.20.1.146:8081/editfile',
                 type:'POST',
                 data:{beforetext: beforetext,aftertext: inputvalue},
                 error:function () {
@@ -108,7 +134,7 @@ var addFliebox = $('#addFliebox');
 var addFile = function () {
     var newfiletext = '新建文件夹(' + filecode + ')';
     $.ajax({
-        url:'http://localhost:8081/addfile',
+        url:'http://172.20.1.146:8081/addfile',
         type:'POST',
         data:{filename:newfiletext},
         error:function () {
@@ -126,6 +152,7 @@ var addFile = function () {
                 bindopenfile(fileicon);
                 editfilename(editicon, confirmediticon);
                 $(editicon).trigger('click');
+                updatefileoptions();
             }
             else{
                 showToast($('#rightBar'),res);
@@ -135,13 +162,43 @@ var addFile = function () {
 
 
 };
-$(addFliebox).click(function () {
+$(addFliebox).click(function (e) {
+    e.stopPropagation();
     addFile();
-    updatefileoptions();
 });
 //删除文件夹
 var deleteFileBox = $('#deleteFileBox');
 var dodelete = $('#dodelete');
+var delfuc=function (data,todelArr) {
+    $.ajax({
+        url:'http://172.20.1.146:8081/deletefile',
+        type:'POST',
+        data:data,
+        processData :false,
+        error:function () {
+            showToast($('#rightBar'),'网络错误');
+        },
+        success:function (res) {
+            console.log(res);
+            if(res.result){
+                todelArr.forEach(function (value) {
+                    var listitems=$('#tab1-content .file-list .list-item');
+                    listitems.each(function (index, el) {
+                        if(value===$(el).find('.filenametext').text()){
+                            removeItem($(el), updatefileoptions);
+                        }
+                    })
+                });
+            }
+            else{
+                showToast($('#rightBar'),res.message);
+                setTimeout(function () {
+                    closeToast();
+                },2000);
+            }
+        }
+    });
+};
 $(deleteFileBox).click(function () {
     $('#tab1-content ul li.list-item').each(function (index) {
         $($('#tab1-content ul li.list-item')[index]).find("input[type='checkbox']").removeAttr('disabled');
@@ -156,18 +213,22 @@ $(deleteFileBox).click(function () {
 $(dodelete).click(function () {
     var check = $("#tab1-content ul li.list-item .checkbox-wrap");
     var notemptyfileList=[];
+    var emptyfile=[];
     $(check).each(function (index) {
         if ($(this).find('input').prop('checked')) {
             var targetname=$(this).next('.file-list-item').find('.filenametext').text();
+            console.log(filesmock);
             $.each(filesmock,function (index,value) {
                 if(value.filename===targetname){
                     //console.log(targetname);
                     if(value.subfiles.length>0){
                         notemptyfileList.push(targetname);
                     }
+                    else{
+                        emptyfile.push(targetname);
+                    }
                 }
             })
-//
         }
     });
     //不管是确定还是取消删除，把checkbox勾选状态还原
@@ -181,43 +242,21 @@ $(dodelete).click(function () {
             console.log(notemptyfileList.join());
             var data=notemptyfileList.join();
             if(d){
-                $.ajax({
-                    url:'http://localhost:8081/deletefile',
-                    type:'POST',
-                    data:data,
-                    processData :false,
-                    error:function () {
-                        showToast($('#rightBar'),'网络错误');
-                    },
-                    success:function (res) {
-                        console.log(res);
-                        if(res.result){
-                            notemptyfileList.forEach(function (value) {
-                                var listitems=$('#tab1-content .file-list .list-item');
-                                listitems.each(function (index, el) {
-                                    if(value===$(el).find('.filenametext').text()){
-                                        removeItem($(el), updatefileoptions);
-                                    }
-                                })
-                            });
-                        }
-                        else{
-                            showToast($('#rightBar'),res.message);
-                            setTimeout(function () {
-                                closeToast();
-                            },2000);
-                        }
-                    }
-                });
+                delfuc(data,notemptyfileList);
             }
         });
+    }
+    if(emptyfile.length>0){
+        var data=emptyfile.join();
+        delfuc(data,emptyfile);
     }
     $('#tab1-content .file-list .checkbox-wrap').toggle();
     $(this).toggle();
     $(deleteFileBox).toggle();
 });
-//根据左边的文件夹更新上传选择文件option
+//根据左边的文件夹更新上传选择文件option,keepValue是上传成功之后，选项不变
 var updatefileoptions = function (keepvalue) {
+    console.log('更新上传option');
     var lis = $(wraper).children('li.list-item');
     var select = $('#filesSelect');
     $(select).children('option').remove();
@@ -235,7 +274,7 @@ var updatefileoptions = function (keepvalue) {
 var filesmock;
 var updateAllFiles=function (keepfileoption) {
     $.ajax({
-        url: 'http://localhost:8081/filesList',
+        url: 'http://172.20.1.146:8081/filesList',
         type: 'GET',
         error: function () {
             console.log('网络连接错误');
@@ -259,7 +298,7 @@ var updateAllFiles=function (keepfileoption) {
                 "            </li>";
             //根据返回数据初始化文件夹
             $.each(filesmock, function (index, value) {
-                if (value.filename === '默认文件夹') {
+                if (value.filename === 'default') {
                     var fileicon = $(firstdom).find('.file-icon');
                     var editicon = $(firstdom).find('.editicon').addClass('none');
                     $(firstdom).after(subfileshtmltext);
@@ -334,14 +373,14 @@ $(submitAll).click(function (e) {
 
         if(checkFileWraper()){
             $.ajax({
-                url: 'http://localhost:8081/targetFile',
+                url: 'http://172.20.1.146:8081/targetFile',
                 type: 'POST',
                 data: {targetFile: selectedFilesWrap},
                 success: function (res) {
                     console.log(res);
                     //先判断文件夹有没有问题，再提交进行文件上传
                     $.ajax({
-                        url: 'http://localhost:8081/upload',
+                        url: 'http://172.20.1.146:8081/upload',
                         type: 'POST',
                         processData: false,  // 不处理数据，默认情况下，为了配合application/x-www-urlencoded,会把data转换成查询字符串
                         contentType: false,   // 不设置内容类型
@@ -366,7 +405,7 @@ $(submitAll).click(function (e) {
                             //把进度条样式还原
                             $('#progress .progress-bar').css('width', '0%');
 
-                            //更新文件夹视图
+                            //更新文件夹视图,参数文件上传之后选择的文件夹
                             updateAllFiles(selectedFilesWrap);
                         },
                         xhr: function () {
@@ -406,7 +445,7 @@ $(submitAll).click(function (e) {
 
 });
 $('#fileupload').fileupload({
-    url: 'http://localhost:8081/upload',
+    url: 'http://172.20.1.146:8081/upload',
 
     //进度条
     progressall: function (e, data) {
@@ -505,7 +544,7 @@ $('#fileupload').fileupload({
                         if(checkFileWraper()){
                             var selectedFilesWrap = $('#filesSelect').val();
                             $.ajax({
-                                url: 'http://localhost:8081/targetFile',
+                                url: 'http://172.20.1.146:8081/targetFile',
                                 type: 'POST',
                                 data: {targetFile: selectedFilesWrap},
                                 error:function () {},

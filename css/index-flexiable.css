@@ -2,20 +2,20 @@
     div.body{
         margin-left: 50px;
     }
-    nav .nav-wrap{
+    .nav-wrap{
         justify-content: center;
     }
-    nav h3{
+    .nav-wrap h3{
         font-size: 20px;
         margin-left: 0;
     }
-    nav .topbarFun-wrap{
+    .nav-wrap .topbarFun-wrap{
         right: 0;
     }
-    nav .topbarFun-wrap .name,nav .topbarFun-wrap .img-wrap{
+    .nav-wrap .topbarFun-wrap .name,.nav-wrap .topbarFun-wrap .img-wrap{
         display: none;
     }
-    nav .left-fun{
+    .nav-wrap .left-fun{
         display: block!important;
     }
 
@@ -62,5 +62,19 @@
     div.select-files {
         width: 200px;
         justify-content: flex-start;
+    }
+    div.select-files>.input-group-btn button{
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    #rightBar .file-list li.list-item div.file-list-item p.filename-display-box .filenameinput input{
+        padding: 3px 6px;
+        height: 20px;
+    }
+    #rightBar .file-list li.files-detail ul.sigle-file-wrap{
+        padding-left: 0;
+    }
+    #rightBar .file-list li.files-detail ul.sigle-file-wrap li{
+        width: 100%;
     }
 }

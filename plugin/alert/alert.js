@@ -71,6 +71,10 @@ var showAlert = function (mes) {
         padding: '8px 15px',
         fontSize: '1em'
     });
+    //阻止冒泡,实现阻止rightBar关闭
+    $('#alert').click(function (e) {
+        e.stopPropagation();
+    });
     return new Promise(function (resolve, reject) {
         $('#alert').find('.alert-confirm-btn').click(function () {
             closeAlert('confirm');

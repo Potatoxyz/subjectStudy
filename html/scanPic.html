@@ -32,22 +32,35 @@
 <script src="../plugin/jquery/jquery-3.2.1.min.js"></script>
 <script src="../plugin/slide/jquery.fullpage.js"></script>
 <script>
-    var initPage=function (anchors) {
-        var htmltext='<div id="fullpage"><div class="section"></div></div>';
+    var t=1;
+    var initPage=function (anchors,srcs) {
+        if(t>1){
+            $.fn.fullpage.destroy('all');
+            $('body').empty();
+        }
+        var htmltext='<div id="fullpage"></div>';
         $(htmltext).appendTo('body');
-        var picshtml='<div class="slide"><img src="" alt="暂时无法显示"></div>';
+        srcs.forEach(function (value,index) {
+            var picshtml='<div class="section"><div class="slide"><img alt="图片暂时无法显示" src='+value+'></div></div>';
+            $(picshtml).removeClass('active');
+            $('#fullpage').append(picshtml);
+        });
         window.parent.$('#playPic').prop('height','auto');
         initFullpage(anchors);
+        $.fn.fullpage.moveTo('Pic0', 1);
+        t++;
     };
-
     var initFullpage=function (anchors) {
         //图片浏览
         $('#fullpage').fullpage(
             {
                 sectionsColor: ['#d8bfd8','#bc8f8f','#ffdab9','#fff4f0','#fffacd','#8fbc8f','#b0c4de','#b0e0e6','#d3d3d3'],
                 anchors:anchors,
-                animateAnchor:false,
-                navigation:true
+                animateAnchor:true,
+                navigation:true,
+                scrollingSpeed:500,
+                recordHistory:false,
+                showActiveTooltip:true
             }
         );
     }

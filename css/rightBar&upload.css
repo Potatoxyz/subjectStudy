@@ -37,6 +37,11 @@
     width: 15%;
     text-align: center;
 }
+.rightBar .file-list li.list-item div.file-list-item .file-icon i,.rightBar .file-list li .editFileName i{
+    display: inline-block;
+    width: 100%;
+}
+
 
 .rightBar .file-list li.list-item div.file-list-item p {
     width: 70%;
@@ -126,25 +131,17 @@
     width: 40px;
     height: 40px;
 }
-
-.select-files {
-    width: 300px;
-    display: flex;
-    justify-content: center;
+.select-files{
+    margin:0 auto;
+    width: 87%;
 }
-.select-files>.input-group-btn{
-    width: 26.6%;
-}
-.select-files>select#filesSelect{
-    width: 60%;
-}
-
 .progress {
     height: 20px;
 }
 
 .rightBar .file-list li.files-detail {
     margin-top: -15px;
+    overflow-x: hidden;
 }
 
 .rightBar .file-list li.files-detail .files-detail-icon {

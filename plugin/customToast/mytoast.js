@@ -27,6 +27,9 @@ function showToast(container,message) {
     (dom.children('p'))[0].innerText=message;
     dom.children('button').click(function () {
         closeToast();
+    });
+    $('#toast').click(function (e) {
+        e.stopPropagation();
     })
 }
 function closeToast() {
