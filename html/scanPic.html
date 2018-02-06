@@ -45,10 +45,18 @@
             $(picshtml).removeClass('active');
             $('#fullpage').append(picshtml);
         });
-        window.parent.$('#playPic').prop('height','auto');
-        initFullpage(anchors);
-        $.fn.fullpage.moveTo('Pic0', 1);
-        t++;
+        console.log(anchors);
+        if(anchors.length>0){
+            window.parent.$('#playPic').siblings('iframe').prop('height','0');
+            window.parent.$('#playPic').prop('height','100%');
+            initFullpage(anchors);
+            $.fn.fullpage.moveTo('Pic0', 1);
+            t++;
+        }
+        else{
+            window.parent.$('#playPic').siblings('iframe').prop('height','0');
+            window.parent.$('#playPic').prop('height','0');
+        }
     };
     var initFullpage=function (anchors) {
         //图片浏览
