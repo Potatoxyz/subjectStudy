@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../plugin/bootstrap3/bootstrap.css">
+    <link rel="stylesheet" href="../plugin/scrollBar/scrollBar.css">
+    <link rel="stylesheet" href="../css/public.css">
+    <title>Document</title>
+</head>
+<style>
+    @media screen and (max-width: 768px){
+        div.container{
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+    }
+    body{
+        min-height: 100vh;
+        background: transparent;
+        color:white;
+        overflow-y: auto;
+    }
+    .container{
+        min-height: 1000px;
+        border:1px solid white;
+        margin:20px auto;
+        border-radius: 5px;
+    }
+    .title{
+        position: relative;
+    }
+    .title h3{
+        margin-bottom: 20px;
+        padding-bottom: 3px;
+        border-bottom: 2px solid white;
+    }
+    .content{
+    }
+    .text-filed textarea{
+        border-color: rgba(95,190,140,.8);
+        color:white;
+    }
+    .message-filed .user{
+        width: 65px;
+    }
+    .message-filed .user .img-wrap{
+        border-radius: 50%;
+        overflow: hidden;
+        width: 50px;
+        height: 50px;
+    }
+    .message-filed .user .img-wrap img{
+       width: 100%;
+        height: 100%;
+    }
+    .message-filed .messages{
+        width: calc(100% - 65px);
+    }
+    .message-filed .messages>div textarea{
+        width: 100%;
+        background-color: transparent;
+    }
+    .time{
+        font-size: 0.8em;
+    }
+</style>
+<body>
+<div class="container"  >
+    <div class="title">
+        <h3>留言</h3>
+    </div>
+    <div class="content" id="messageList">
+        <div class="text-filed mb15">
+            <form action="#">
+                <div>
+                    <textarea name="" id="mes-filed" rows="3" class="form-control bg-black mb15" maxlength="150"></textarea>
+                </div>
+                <div style="height: 34px">
+                    <button type="button" class="btn btn-primary right" id="submit">发表</button>
+                </div>
+            </form>
+        </div>
+        <div class="list">
+            <div style="display: none;">
+                <div class="message-filed flex"  id="list-item">
+                    <div class="user">
+                        <div class="img-wrap">
+                            <img src="" class="pic" alt="头像">
+                        </div>
+                    </div>
+                    <div class="messages">
+                        <p><b class="mr5"></b><b class="grey-text time"></b></p>
+                        <div>
+                            <textarea rows="3"  class="mes"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+<script src="../plugin/jquery/jquery-3.2.1.min.js"></script>
+<script src="../plugin/table/table.js"></script>
+<script>
+    $(function () {
+        var options={
+            valueNames:['time','mes',{name:'pic',attr:'src'}],
+            item:'list-item'
+        };
+        var messageList=new List('messageList',options);
+        var submit=$('#submit'),mesFiled=$('#mes-filed');
+        $(submit).click(function () {
+            var timeNow=new Date();
+            var mesValue=mesFiled.val();
+            if(mesValue!==''){
+                messageList.add({
+                    time:timeNow.toLocaleString(),
+                    mes:mesValue,
+                    pic:'../img/Wolf-f.jpg'}
+                );
+                mesFiled.val('');
+                mesFiled.parents('div').removeClass('has-error');
+            }
+            else{
+                mesFiled.parents('div').addClass('has-error');
+            }
+            $(mesFiled)[0].focus();
+        })
+    })
+</script>
+</html>

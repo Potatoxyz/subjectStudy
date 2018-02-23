@@ -16,6 +16,9 @@ ul li{
 .mb15{
     margin-bottom: 15px;
 }
+.mr5{
+    margin-right: 5px;
+}
 .right{
     float:right;
 }
@@ -78,6 +81,9 @@ a:hover,a:link,a:visited,a:active{
 .blue-text{
     color:#00bfff;
 }
+.grey-text{
+    color:grey;
+}
 .toast{
     position: fixed;
     z-index: 1000;
@@ -120,4 +126,12 @@ input:focus{
 }
 .btn-bg-blue{
     background:linear-gradient(to right,#4169E1,#1E90ff);
+}
+input[type=number] {
+    -moz-appearance:textfield;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

@@ -117,7 +117,7 @@
     <ul>
         <li>
             <div class="link-wrap">
-                <a class="link text-left" href="javascript:;">首页</a>
+                <a class="link text-left" href="javascript:;" id="index">首页</a>
             </div>
             <div class="icon-box active-box flex">
                 <i class="glyphicon glyphicon-home white-text fa-2x noCusor"></i>
@@ -125,10 +125,10 @@
         </li>
         <li>
             <div class="link-wrap">
-                <a class="link text-left" href="javascript:;">留言</a>
+                <a class="link text-left" href="javascript:;" id="message">留言</a>
             </div>
             <div class="icon-box flex">
-                <i class="glyphicon glyphicon-home white-text fa-2x noCusor"></i>
+                <i class="glyphicon glyphicon-pencil white-text fa-2x noCusor"></i>
             </div>
         </li>
         <li>
@@ -136,7 +136,7 @@
                 <a class="link text-left" href="javascript:;">点名</a>
             </div>
             <div class="icon-box flex">
-                <i class="glyphicon glyphicon-home white-text fa-2x noCusor"></i>
+                <i class="glyphicon glyphicon-user white-text fa-2x noCusor"></i>
             </div>
         </li>
     </ul>
@@ -227,8 +227,10 @@
 </div>
 <div class="body">
     <div class="content">
-    <iframe id="playPic" src="./scanPic.html" frameborder="0" width="100%" height="0"></iframe>
-    <iframe id="userinfo" src="./user-setting.html" frameborder="0" width="100%" height="0"></iframe>
+    <iframe id="playPic" src="./scanPic.html" frameborder="0" width="100%" height="100%" style="display: none;"></iframe>
+    <iframe id="userinfo" src="./user-setting.html" frameborder="0" width="100%" height="100%" style="display: none;"></iframe>
+    <iframe id="indexPage" src="./plan.html" frameborder="0" width="100%" height="100%"></iframe>
+    <iframe id="messagePage" src="./message.html" frameborder="0" width="100%" height="100%" style="display: none;"></iframe>
     </div>
 </div>
 </body>
@@ -289,11 +291,25 @@
             e.stopPropagation();
             $('#user-dropdown').toggle();
         });
+
+        //用户设置链接
         $('#userSetting').click(function () {
             $('#user-dropdown').toggle();
-            $('#userinfo').siblings('iframe').prop('height','0');
-            $('#userinfo').prop('height','100%');
-        })
+            $('#userinfo').siblings('iframe').css('display','none');
+            $('#userinfo').show();
+        });
+
+
+        //侧边栏首页链接
+        $('#index').click(function () {
+            $('#indexPage').siblings('iframe').css('display','none');
+            $('#indexPage').show();
+        });
+        //侧边栏留言链接
+        $('#message').click(function () {
+            $('#messagePage').siblings('iframe').css('display','none');
+            $('#messagePage').show();
+        });
     })
 </script>
 </html>
